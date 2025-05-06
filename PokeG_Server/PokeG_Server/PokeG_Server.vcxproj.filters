@@ -13,5 +13,36 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="소스 파일\Manager">
+      <UniqueIdentifier>{800a7f6c-9f21-40ed-92f9-469bc317e4a2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Manager\Header">
+      <UniqueIdentifier>{01ee6fd6-7a22-4265-8202-1a20758eb79a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Manager\Source">
+      <UniqueIdentifier>{a94e8f47-aa70-42c4-8223-50fb746345b8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Util">
+      <UniqueIdentifier>{6632495f-f417-4fa9-aba9-98226b32a63e}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Manager\Source\PokeG_Server.cpp">
+      <Filter>소스 파일\Manager\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="UtilLog.cpp">
+      <Filter>소스 파일\Util</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Manager\Header\PokeG_Server.h">
+      <Filter>소스 파일\Manager\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="UtilLog.h">
+      <Filter>소스 파일\Util</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
