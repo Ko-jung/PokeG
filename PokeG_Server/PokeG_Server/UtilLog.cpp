@@ -1,7 +1,9 @@
+#include "stdafx.h"
 #include "UtilLog.h"
 
 // 가변인자
 #include <cstdarg>
+#include <iostream>
 
 template<typename Args>
 void UtilLog::Log(const Args message)
@@ -25,6 +27,23 @@ inline void UtilLog::Log(std::format_string<Args...> fmt, Args && ...args)
 
 	// std::format(fmt, std::forward<Args>(args)...)
 	// std::format은 C++20부터 지원되는 포맷팅 라이브러리
-
+#ifdef _DEBUG
 	std::cerr<< std::format(fmt, std::forward<Args>(args)...) << std::endl;
+#endif
+}
+
+void UtilLog::ErrorDisplay(int ErrorCode)
+{
+#ifdef _DEBUG
+	WCHAR* lpMsgBuf;
+	FormatMessage(
+		FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
+		NULL, ErrorCode,
+		MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+		(LPTSTR)&lpMsgBuf, 0, 0);
+	std::wcout << lpMsgBuf << std::endl;
+	//while (true);
+	LocalFree(lpMsgBuf);
+#endif
+}
 }

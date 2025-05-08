@@ -9,4 +9,6 @@ public:
 
 	template<typename... Args>
 	static void Log(std::format_string<Args...> fmt, Args&&... args);
+
+	void ErrorDisplay(int ErrorCode);
 };

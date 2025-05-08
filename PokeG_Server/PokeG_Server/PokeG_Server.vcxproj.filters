@@ -30,19 +30,22 @@
     <ClCompile Include="main.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="Manager\Source\PokeG_Server.cpp">
-      <Filter>소스 파일\Manager\Source</Filter>
-    </ClCompile>
     <ClCompile Include="UtilLog.cpp">
       <Filter>소스 파일\Util</Filter>
     </ClCompile>
+    <ClCompile Include="PokeG_Server.cpp">
+      <Filter>소스 파일\Manager\Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Manager\Header\PokeG_Server.h">
-      <Filter>소스 파일\Manager\Header</Filter>
-    </ClInclude>
     <ClInclude Include="UtilLog.h">
       <Filter>소스 파일\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="PokeG_Server.h">
+      <Filter>소스 파일\Manager\Header</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

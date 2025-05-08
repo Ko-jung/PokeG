@@ -30,4 +30,5 @@ bool PokeG_Server::Init()
 
 void PokeG_Server::Start()
 {
+	Init();
 }

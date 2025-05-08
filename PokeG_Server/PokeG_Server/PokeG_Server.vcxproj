@@ -20,11 +20,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Manager\Source\PokeG_Server.cpp" />
+    <ClCompile Include="PokeG_Server.cpp" />
     <ClCompile Include="UtilLog.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Manager\Header\PokeG_Server.h" />
+    <ClInclude Include="PokeG_Server.h" />
+    <ClInclude Include="stdafx.h" />
     <ClInclude Include="UtilLog.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
