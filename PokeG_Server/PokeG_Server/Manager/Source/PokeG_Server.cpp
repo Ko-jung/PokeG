@@ -1,4 +1,5 @@
 #include "../Header/PokeG_Server.h"
+#include "../Header/UtilLog.h"
 #include <WinSock2.h>
 
 PokeG_Server::PokeG_Server()
@@ -18,7 +19,7 @@ bool PokeG_Server::Init()
 	ListenSocket = WSASocket(AF_INET, SOCK_STREAM, IPPROTO_TCP, 0, 0, WSA_FLAG_OVERLAPPED);
 	if (INVALID_SOCKET == ListenSocket)
 	{
-		LogUtil::error_display(WSAGetLastError());
+		UtilLog::error_display(WSAGetLastError());
 		return false;
 	}
 

@@ -46,4 +46,3 @@ void UtilLog::ErrorDisplay(int ErrorCode)
 	LocalFree(lpMsgBuf);
 #endif
 }
-}
