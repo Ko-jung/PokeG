@@ -18,10 +18,18 @@
     <ClCompile Include="소스.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="JsonTest.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Packet.txt">
       <Filter>소스 파일</Filter>
     </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Data.json">
+      <Filter>소스 파일</Filter>
+    </None>
   </ItemGroup>
 </Project>

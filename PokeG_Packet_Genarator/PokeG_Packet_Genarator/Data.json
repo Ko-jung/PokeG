@@ -1,0 +1,13 @@
+{
+  "Monsters": {
+    "Zombie": {
+      "Hp": 100,
+      "Attack": 10,
+      "Defense": 5,
+      "Speed": 15,
+
+      "Size": 10
+    }
+  }
+}
+   
