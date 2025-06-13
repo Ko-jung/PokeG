@@ -1,5 +1,7 @@
 #pragma once
 
+#include "../../stdafx.h"
+
 class PokeG_Server
 {
 	std::shared_ptr<class SOCKET> ListenSocket;

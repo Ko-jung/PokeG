@@ -3,3 +3,6 @@
 #include <WinSock2.h>
 #pragma comment(lib, "MSWSock.lib")
 #pragma comment(lib, "ws2_32.lib")
+
+#include <string>
+#include <memory>

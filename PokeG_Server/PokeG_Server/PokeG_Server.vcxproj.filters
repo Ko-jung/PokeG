@@ -25,27 +25,122 @@
     <Filter Include="소스 파일\Util">
       <UniqueIdentifier>{6632495f-f417-4fa9-aba9-98226b32a63e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\RapidJson">
+      <UniqueIdentifier>{ee9b1407-b159-4536-afa1-091069c3b2b1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Monster">
+      <UniqueIdentifier>{45c920e3-f94b-496f-a481-0bb65ae81516}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Util\Json">
+      <UniqueIdentifier>{5f2d1fbb-6882-42ec-9500-ff86dc149362}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="UtilLog.cpp">
-      <Filter>소스 파일\Util</Filter>
-    </ClCompile>
     <ClCompile Include="Manager\Source\PokeG_Server.cpp">
       <Filter>소스 파일\Manager\Source</Filter>
     </ClCompile>
+    <ClCompile Include="Manager\Source\MonsterMgr.cpp">
+      <Filter>소스 파일\Manager\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Monster.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Util\UtilLog.cpp">
+      <Filter>소스 파일\Util</Filter>
+    </ClCompile>
+    <ClCompile Include="Util\JsonParser.cpp">
+      <Filter>소스 파일\Util\Json</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="UtilLog.h">
-      <Filter>소스 파일\Util</Filter>
-    </ClInclude>
     <ClInclude Include="stdafx.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Manager\Header\PokeG_Server.h">
       <Filter>소스 파일\Manager\Header</Filter>
     </ClInclude>
+    <ClInclude Include="rapidjson\allocators.h">
+      <Filter>소스 파일\RapidJson</Filter>
+    </ClInclude>
+    <ClInclude Include="rapidjson\cursorstreamwrapper.h">
+      <Filter>소스 파일\RapidJson</Filter>
+    </ClInclude>
+    <ClInclude Include="rapidjson\document.h">
+      <Filter>소스 파일\RapidJson</Filter>
+    </ClInclude>
+    <ClInclude Include="rapidjson\encodedstream.h">
+      <Filter>소스 파일\RapidJson</Filter>
+    </ClInclude>
+    <ClInclude Include="rapidjson\encodings.h">
+      <Filter>소스 파일\RapidJson</Filter>
+    </ClInclude>
+    <ClInclude Include="rapidjson\filereadstream.h">
+      <Filter>소스 파일\RapidJson</Filter>
+    </ClInclude>
+    <ClInclude Include="rapidjson\filewritestream.h">
+      <Filter>소스 파일\RapidJson</Filter>
+    </ClInclude>
+    <ClInclude Include="rapidjson\fwd.h">
+      <Filter>소스 파일\RapidJson</Filter>
+    </ClInclude>
+    <ClInclude Include="rapidjson\istreamwrapper.h">
+      <Filter>소스 파일\RapidJson</Filter>
+    </ClInclude>
+    <ClInclude Include="rapidjson\memorybuffer.h">
+      <Filter>소스 파일\RapidJson</Filter>
+    </ClInclude>
+    <ClInclude Include="rapidjson\memorystream.h">
+      <Filter>소스 파일\RapidJson</Filter>
+    </ClInclude>
+    <ClInclude Include="rapidjson\ostreamwrapper.h">
+      <Filter>소스 파일\RapidJson</Filter>
+    </ClInclude>
+    <ClInclude Include="rapidjson\pointer.h">
+      <Filter>소스 파일\RapidJson</Filter>
+    </ClInclude>
+    <ClInclude Include="rapidjson\prettywriter.h">
+      <Filter>소스 파일\RapidJson</Filter>
+    </ClInclude>
+    <ClInclude Include="rapidjson\rapidjson.h">
+      <Filter>소스 파일\RapidJson</Filter>
+    </ClInclude>
+    <ClInclude Include="rapidjson\reader.h">
+      <Filter>소스 파일\RapidJson</Filter>
+    </ClInclude>
+    <ClInclude Include="rapidjson\schema.h">
+      <Filter>소스 파일\RapidJson</Filter>
+    </ClInclude>
+    <ClInclude Include="rapidjson\stream.h">
+      <Filter>소스 파일\RapidJson</Filter>
+    </ClInclude>
+    <ClInclude Include="rapidjson\stringbuffer.h">
+      <Filter>소스 파일\RapidJson</Filter>
+    </ClInclude>
+    <ClInclude Include="rapidjson\uri.h">
+      <Filter>소스 파일\RapidJson</Filter>
+    </ClInclude>
+    <ClInclude Include="rapidjson\writer.h">
+      <Filter>소스 파일\RapidJson</Filter>
+    </ClInclude>
+    <ClInclude Include="Manager\Header\MonsterMgr.h">
+      <Filter>소스 파일\Manager\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Monster.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Util\UtilLog.h">
+      <Filter>소스 파일\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="Util\JsonParser.h">
+      <Filter>소스 파일\Util\Json</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Data.json">
+      <Filter>소스 파일</Filter>
+    </None>
   </ItemGroup>
 </Project>

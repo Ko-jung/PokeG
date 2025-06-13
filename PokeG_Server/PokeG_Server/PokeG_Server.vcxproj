@@ -20,13 +20,43 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Manager\Source\MonsterMgr.cpp" />
     <ClCompile Include="Manager\Source\PokeG_Server.cpp" />
-    <ClCompile Include="UtilLog.cpp" />
+    <ClCompile Include="Monster.cpp" />
+    <ClCompile Include="Util\JsonParser.cpp" />
+    <ClCompile Include="Util\UtilLog.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Manager\Header\MonsterMgr.h" />
     <ClInclude Include="Manager\Header\PokeG_Server.h" />
+    <ClInclude Include="Monster.h" />
+    <ClInclude Include="rapidjson\allocators.h" />
+    <ClInclude Include="rapidjson\cursorstreamwrapper.h" />
+    <ClInclude Include="rapidjson\document.h" />
+    <ClInclude Include="rapidjson\encodedstream.h" />
+    <ClInclude Include="rapidjson\encodings.h" />
+    <ClInclude Include="rapidjson\filereadstream.h" />
+    <ClInclude Include="rapidjson\filewritestream.h" />
+    <ClInclude Include="rapidjson\fwd.h" />
+    <ClInclude Include="rapidjson\istreamwrapper.h" />
+    <ClInclude Include="rapidjson\memorybuffer.h" />
+    <ClInclude Include="rapidjson\memorystream.h" />
+    <ClInclude Include="rapidjson\ostreamwrapper.h" />
+    <ClInclude Include="rapidjson\pointer.h" />
+    <ClInclude Include="rapidjson\prettywriter.h" />
+    <ClInclude Include="rapidjson\rapidjson.h" />
+    <ClInclude Include="rapidjson\reader.h" />
+    <ClInclude Include="rapidjson\schema.h" />
+    <ClInclude Include="rapidjson\stream.h" />
+    <ClInclude Include="rapidjson\stringbuffer.h" />
+    <ClInclude Include="rapidjson\uri.h" />
+    <ClInclude Include="rapidjson\writer.h" />
     <ClInclude Include="stdafx.h" />
-    <ClInclude Include="UtilLog.h" />
+    <ClInclude Include="Util\JsonParser.h" />
+    <ClInclude Include="Util\UtilLog.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Data.json" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
