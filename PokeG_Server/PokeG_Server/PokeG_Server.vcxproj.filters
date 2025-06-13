@@ -45,14 +45,14 @@
     <ClCompile Include="Manager\Source\MonsterMgr.cpp">
       <Filter>소스 파일\Manager\Source</Filter>
     </ClCompile>
-    <ClCompile Include="Monster.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="Util\UtilLog.cpp">
       <Filter>소스 파일\Util</Filter>
     </ClCompile>
     <ClCompile Include="Util\JsonParser.cpp">
       <Filter>소스 파일\Util\Json</Filter>
+    </ClCompile>
+    <ClCompile Include="Monster.cpp">
+      <Filter>소스 파일\Monster</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -128,14 +128,23 @@
     <ClInclude Include="Manager\Header\MonsterMgr.h">
       <Filter>소스 파일\Manager\Header</Filter>
     </ClInclude>
-    <ClInclude Include="Monster.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="Util\UtilLog.h">
       <Filter>소스 파일\Util</Filter>
     </ClInclude>
     <ClInclude Include="Util\JsonParser.h">
       <Filter>소스 파일\Util\Json</Filter>
+    </ClInclude>
+    <ClInclude Include="Monster.h">
+      <Filter>소스 파일\Monster</Filter>
+    </ClInclude>
+    <ClInclude Include="OverExpasion.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Protocol.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Enum.h">
+      <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

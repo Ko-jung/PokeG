@@ -4,5 +4,9 @@
 #pragma comment(lib, "MSWSock.lib")
 #pragma comment(lib, "ws2_32.lib")
 
+#include <vector>
 #include <string>
 #include <memory>
+#include <thread>
+#include <Windows.h>
+#include <cassert>

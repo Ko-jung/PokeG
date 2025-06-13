@@ -27,9 +27,12 @@
     <ClCompile Include="Util\UtilLog.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Enum.h" />
     <ClInclude Include="Manager\Header\MonsterMgr.h" />
     <ClInclude Include="Manager\Header\PokeG_Server.h" />
     <ClInclude Include="Monster.h" />
+    <ClInclude Include="OverExpasion.h" />
+    <ClInclude Include="Protocol.h" />
     <ClInclude Include="rapidjson\allocators.h" />
     <ClInclude Include="rapidjson\cursorstreamwrapper.h" />
     <ClInclude Include="rapidjson\document.h" />
