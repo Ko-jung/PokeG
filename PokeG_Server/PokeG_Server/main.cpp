@@ -1,16 +1,21 @@
-#include "Manager/Header/PokeG_Server.h"
+﻿#include "stdafx.h"
+#include "Define.h"
 
-#include <iostream>
+#include "../../Common/protocol.h"
+
+#include "IOCPServer.h"
 
 int main()
 {
 	setlocale(LC_ALL, "");
 	std::wcout.imbue(std::locale(""));
 
-	// Create a new instance of the server
-	PokeG_Server Server;
-	// Start the server
-	Server.Start();
+	IOCPServer* IocpServer = new IOCPServer();
 
-	return 0;
+	IocpServer->Init(std::thread::hardware_concurrency());
+	IocpServer->BindListen(GAMESERVERPORT);
+
+	IocpServer->StartServer();
+
+	IocpServer->ThreadJoin();
 }

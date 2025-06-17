@@ -13,170 +13,105 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="소스 파일\Manager">
-      <UniqueIdentifier>{800a7f6c-9f21-40ed-92f9-469bc317e4a2}</UniqueIdentifier>
+    <Filter Include="Util">
+      <UniqueIdentifier>{8ac80069-772b-4cdf-bf62-b62ca4eee421}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\Manager\Header">
-      <UniqueIdentifier>{01ee6fd6-7a22-4265-8202-1a20758eb79a}</UniqueIdentifier>
+    <Filter Include="Manager">
+      <UniqueIdentifier>{af37b841-a590-4c21-92a0-96e871c92c66}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\Manager\Source">
-      <UniqueIdentifier>{a94e8f47-aa70-42c4-8223-50fb746345b8}</UniqueIdentifier>
+    <Filter Include="Manager\Header">
+      <UniqueIdentifier>{b67ccbf1-ea50-417e-a3c1-2753e6367a8e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\Util">
-      <UniqueIdentifier>{6632495f-f417-4fa9-aba9-98226b32a63e}</UniqueIdentifier>
+    <Filter Include="Manager\Source">
+      <UniqueIdentifier>{18d97197-f391-4f1e-be4e-98968e74e2d0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\RapidJson">
-      <UniqueIdentifier>{ee9b1407-b159-4536-afa1-091069c3b2b1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="소스 파일\Monster">
-      <UniqueIdentifier>{45c920e3-f94b-496f-a481-0bb65ae81516}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="소스 파일\Util\Json">
-      <UniqueIdentifier>{5f2d1fbb-6882-42ec-9500-ff86dc149362}</UniqueIdentifier>
+    <Filter Include="Common">
+      <UniqueIdentifier>{3decfe70-4ff3-49c8-bd03-cd50fc899569}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
-      <Filter>소스 파일</Filter>
+    <ClCompile Include="Manager\ClientMgr.cpp">
+      <Filter>Manager\Source</Filter>
     </ClCompile>
-    <ClCompile Include="Manager\Source\PokeG_Server.cpp">
-      <Filter>소스 파일\Manager\Source</Filter>
+    <ClCompile Include="Manager\DBMgr.cpp">
+      <Filter>Manager\Source</Filter>
     </ClCompile>
-    <ClCompile Include="Manager\Source\MonsterMgr.cpp">
-      <Filter>소스 파일\Manager\Source</Filter>
+    <ClCompile Include="Manager\MapMgr.cpp">
+      <Filter>Manager\Source</Filter>
     </ClCompile>
-    <ClCompile Include="Util\UtilLog.cpp">
-      <Filter>소스 파일\Util</Filter>
+    <ClCompile Include="Manager\PacketMgr.cpp">
+      <Filter>Manager\Source</Filter>
     </ClCompile>
-    <ClCompile Include="Util\JsonParser.cpp">
-      <Filter>소스 파일\Util\Json</Filter>
+    <ClCompile Include="Manager\SectorMgr.cpp">
+      <Filter>Manager\Source</Filter>
     </ClCompile>
-    <ClCompile Include="Monster.cpp">
-      <Filter>소스 파일\Monster</Filter>
+    <ClCompile Include="Manager\TimerMgr.cpp">
+      <Filter>Manager\Source</Filter>
     </ClCompile>
-    <ClCompile Include="Manager\Source\ClientMgr.cpp">
-      <Filter>소스 파일\Manager\Source</Filter>
+    <ClCompile Include="Util\CollisionChecker.cpp">
+      <Filter>Util</Filter>
+    </ClCompile>
+    <ClCompile Include="Util\LogUtil.cpp">
+      <Filter>Util</Filter>
     </ClCompile>
     <ClCompile Include="Client.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="Packet.cpp">
+    <ClCompile Include="IOCPServer.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="Manager\Source\PacketMgr.cpp">
+    <ClCompile Include="main.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="stdafx.h">
-      <Filter>헤더 파일</Filter>
+    <ClInclude Include="Manager\ClientMgr.h">
+      <Filter>Manager\Header</Filter>
     </ClInclude>
-    <ClInclude Include="Manager\Header\PokeG_Server.h">
-      <Filter>소스 파일\Manager\Header</Filter>
+    <ClInclude Include="Manager\DBMgr.h">
+      <Filter>Manager\Header</Filter>
     </ClInclude>
-    <ClInclude Include="rapidjson\allocators.h">
-      <Filter>소스 파일\RapidJson</Filter>
+    <ClInclude Include="Manager\MapMgr.h">
+      <Filter>Manager\Header</Filter>
     </ClInclude>
-    <ClInclude Include="rapidjson\cursorstreamwrapper.h">
-      <Filter>소스 파일\RapidJson</Filter>
+    <ClInclude Include="Manager\PacketMgr.h">
+      <Filter>Manager\Header</Filter>
     </ClInclude>
-    <ClInclude Include="rapidjson\document.h">
-      <Filter>소스 파일\RapidJson</Filter>
+    <ClInclude Include="Manager\SectorMgr.h">
+      <Filter>Manager\Header</Filter>
     </ClInclude>
-    <ClInclude Include="rapidjson\encodedstream.h">
-      <Filter>소스 파일\RapidJson</Filter>
+    <ClInclude Include="Manager\TimerMgr.h">
+      <Filter>Manager\Header</Filter>
     </ClInclude>
-    <ClInclude Include="rapidjson\encodings.h">
-      <Filter>소스 파일\RapidJson</Filter>
+    <ClInclude Include="Util\CollisionChecker.h">
+      <Filter>Util</Filter>
     </ClInclude>
-    <ClInclude Include="rapidjson\filereadstream.h">
-      <Filter>소스 파일\RapidJson</Filter>
-    </ClInclude>
-    <ClInclude Include="rapidjson\filewritestream.h">
-      <Filter>소스 파일\RapidJson</Filter>
-    </ClInclude>
-    <ClInclude Include="rapidjson\fwd.h">
-      <Filter>소스 파일\RapidJson</Filter>
-    </ClInclude>
-    <ClInclude Include="rapidjson\istreamwrapper.h">
-      <Filter>소스 파일\RapidJson</Filter>
-    </ClInclude>
-    <ClInclude Include="rapidjson\memorybuffer.h">
-      <Filter>소스 파일\RapidJson</Filter>
-    </ClInclude>
-    <ClInclude Include="rapidjson\memorystream.h">
-      <Filter>소스 파일\RapidJson</Filter>
-    </ClInclude>
-    <ClInclude Include="rapidjson\ostreamwrapper.h">
-      <Filter>소스 파일\RapidJson</Filter>
-    </ClInclude>
-    <ClInclude Include="rapidjson\pointer.h">
-      <Filter>소스 파일\RapidJson</Filter>
-    </ClInclude>
-    <ClInclude Include="rapidjson\prettywriter.h">
-      <Filter>소스 파일\RapidJson</Filter>
-    </ClInclude>
-    <ClInclude Include="rapidjson\rapidjson.h">
-      <Filter>소스 파일\RapidJson</Filter>
-    </ClInclude>
-    <ClInclude Include="rapidjson\reader.h">
-      <Filter>소스 파일\RapidJson</Filter>
-    </ClInclude>
-    <ClInclude Include="rapidjson\schema.h">
-      <Filter>소스 파일\RapidJson</Filter>
-    </ClInclude>
-    <ClInclude Include="rapidjson\stream.h">
-      <Filter>소스 파일\RapidJson</Filter>
-    </ClInclude>
-    <ClInclude Include="rapidjson\stringbuffer.h">
-      <Filter>소스 파일\RapidJson</Filter>
-    </ClInclude>
-    <ClInclude Include="rapidjson\uri.h">
-      <Filter>소스 파일\RapidJson</Filter>
-    </ClInclude>
-    <ClInclude Include="rapidjson\writer.h">
-      <Filter>소스 파일\RapidJson</Filter>
-    </ClInclude>
-    <ClInclude Include="Manager\Header\MonsterMgr.h">
-      <Filter>소스 파일\Manager\Header</Filter>
-    </ClInclude>
-    <ClInclude Include="Util\UtilLog.h">
-      <Filter>소스 파일\Util</Filter>
-    </ClInclude>
-    <ClInclude Include="Util\JsonParser.h">
-      <Filter>소스 파일\Util\Json</Filter>
-    </ClInclude>
-    <ClInclude Include="Monster.h">
-      <Filter>소스 파일\Monster</Filter>
-    </ClInclude>
-    <ClInclude Include="Protocol.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Enum.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Manager\Header\ClientMgr.h">
-      <Filter>소스 파일\Manager\Header</Filter>
-    </ClInclude>
-    <ClInclude Include="Define.h">
-      <Filter>헤더 파일</Filter>
+    <ClInclude Include="Util\LogUtil.h">
+      <Filter>Util</Filter>
     </ClInclude>
     <ClInclude Include="Client.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="OverExpansion.h">
+    <ClInclude Include="Define.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Packet.h">
+    <ClInclude Include="IOCPServer.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Manager\Header\PacketMgr.h">
+    <ClInclude Include="stdafx.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Data.json">
-      <Filter>소스 파일</Filter>
-    </None>
+    <ClInclude Include="..\..\Common\EnumDef.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Common\GameUtil.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Common\OverExpansion.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Common\protocol.h">
+      <Filter>Common</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

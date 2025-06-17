@@ -18,10 +18,62 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Client.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="Manager\Source\ClientMgr.cpp" />
+    <ClCompile Include="Manager\Source\MonsterMgr.cpp" />
+    <ClCompile Include="Manager\Source\PacketMgr.cpp" />
+    <ClCompile Include="Manager\Source\PokeG_Server.cpp" />
+    <ClCompile Include="Monster.cpp" />
+    <ClCompile Include="Packet.cpp" />
+    <ClCompile Include="Util\JsonParser.cpp" />
+    <ClCompile Include="Util\UtilLog.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Client.h" />
+    <ClInclude Include="Define.h" />
+    <ClInclude Include="Enum.h" />
+    <ClInclude Include="Manager\Header\ClientMgr.h" />
+    <ClInclude Include="Manager\Header\MonsterMgr.h" />
+    <ClInclude Include="Manager\Header\PacketMgr.h" />
+    <ClInclude Include="Manager\Header\PokeG_Server.h" />
+    <ClInclude Include="Monster.h" />
+    <ClInclude Include="OverExpansion.h" />
+    <ClInclude Include="Packet.h" />
+    <ClInclude Include="Protocol.h" />
+    <ClInclude Include="rapidjson\allocators.h" />
+    <ClInclude Include="rapidjson\cursorstreamwrapper.h" />
+    <ClInclude Include="rapidjson\document.h" />
+    <ClInclude Include="rapidjson\encodedstream.h" />
+    <ClInclude Include="rapidjson\encodings.h" />
+    <ClInclude Include="rapidjson\filereadstream.h" />
+    <ClInclude Include="rapidjson\filewritestream.h" />
+    <ClInclude Include="rapidjson\fwd.h" />
+    <ClInclude Include="rapidjson\istreamwrapper.h" />
+    <ClInclude Include="rapidjson\memorybuffer.h" />
+    <ClInclude Include="rapidjson\memorystream.h" />
+    <ClInclude Include="rapidjson\ostreamwrapper.h" />
+    <ClInclude Include="rapidjson\pointer.h" />
+    <ClInclude Include="rapidjson\prettywriter.h" />
+    <ClInclude Include="rapidjson\rapidjson.h" />
+    <ClInclude Include="rapidjson\reader.h" />
+    <ClInclude Include="rapidjson\schema.h" />
+    <ClInclude Include="rapidjson\stream.h" />
+    <ClInclude Include="rapidjson\stringbuffer.h" />
+    <ClInclude Include="rapidjson\uri.h" />
+    <ClInclude Include="rapidjson\writer.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="Util\JsonParser.h" />
+    <ClInclude Include="Util\UtilLog.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Data.json" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{aba35a6a-b43a-4d5b-aaf6-08b0eb6dbf54}</ProjectGuid>
+    <ProjectGuid>{1b55b68e-915f-4b65-a2cf-c5301bac3a0e}</ProjectGuid>
     <RootNamespace>PokeGServer</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
@@ -128,37 +180,6 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="Client.cpp" />
-    <ClCompile Include="IOCPServer.cpp" />
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="Manager\ClientMgr.cpp" />
-    <ClCompile Include="Manager\DBMgr.cpp" />
-    <ClCompile Include="Manager\MapMgr.cpp" />
-    <ClCompile Include="Manager\PacketMgr.cpp" />
-    <ClCompile Include="Manager\SectorMgr.cpp" />
-    <ClCompile Include="Manager\TimerMgr.cpp" />
-    <ClCompile Include="Util\CollisionChecker.cpp" />
-    <ClCompile Include="Util\LogUtil.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\..\Common\EnumDef.h" />
-    <ClInclude Include="..\..\Common\GameUtil.h" />
-    <ClInclude Include="..\..\Common\OverExpansion.h" />
-    <ClInclude Include="..\..\Common\protocol.h" />
-    <ClInclude Include="Client.h" />
-    <ClInclude Include="Define.h" />
-    <ClInclude Include="IOCPServer.h" />
-    <ClInclude Include="Manager\ClientMgr.h" />
-    <ClInclude Include="Manager\DBMgr.h" />
-    <ClInclude Include="Manager\MapMgr.h" />
-    <ClInclude Include="Manager\PacketMgr.h" />
-    <ClInclude Include="Manager\SectorMgr.h" />
-    <ClInclude Include="Manager\TimerMgr.h" />
-    <ClInclude Include="stdafx.h" />
-    <ClInclude Include="Util\CollisionChecker.h" />
-    <ClInclude Include="Util\LogUtil.h" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
