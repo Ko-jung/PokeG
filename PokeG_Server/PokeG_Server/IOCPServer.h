@@ -1,11 +1,11 @@
 #pragma once
 #include "stdafx.h"
 
-class IOCPServer
+class PokeGServer
 {
 public:
-	IOCPServer();
-	virtual ~IOCPServer();
+	PokeGServer();
+	virtual ~PokeGServer();
 
 	bool Init(const int);
 	bool BindListen(const int);
@@ -17,7 +17,12 @@ public:
 	void Disconnect(int Id);
 
 	void ReadyAccept();
-	void ProcessAccept(class OverExpansion* exp);
+
+	void ProcessAccept(int id, int byte, class OverExpansion* exp);
+	void ProcessRecv(int id, int byte, class OverExpansion* exp);
+	void ProcessSend(int id, int byte, class OverExpansion* exp);
+	void ProcessNPCMove(int id, int byte, class OverExpansion* exp);
+	void ProcessClientSpawn(int id, int byte, class OverExpansion* exp);
 
 //protected:
 	SOCKET ListenSocket;
@@ -28,5 +33,8 @@ public:
 	std::thread TimerThread;
 
 	int WorkerNum;
+
+private:
+	std::unordered_map<COMP_TYPE, std::function<void(int, int, OverExpansion*)>> CompFuncMap;
 };
 

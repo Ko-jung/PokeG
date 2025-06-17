@@ -10,7 +10,7 @@ int main()
 	setlocale(LC_ALL, "");
 	std::wcout.imbue(std::locale(""));
 
-	IOCPServer* IocpServer = new IOCPServer();
+	PokeGServer* IocpServer = new PokeGServer();
 
 	IocpServer->Init(std::thread::hardware_concurrency());
 	IocpServer->BindListen(GAMESERVERPORT);

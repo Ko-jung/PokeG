@@ -14,16 +14,21 @@
 
 #include "Client.h"
 
-IOCPServer::IOCPServer()
+PokeGServer::PokeGServer()
 {
 	AcceptExpOver = new OverExpansion;
+
+	CompFuncMap[COMP_TYPE::OP_ACCEPT] = [this](int id, int byte, OverExpansion* exp) { this->ProcessAccept(id, byte, exp); };
+	CompFuncMap.insert({ COMP_TYPE::OP_RECV,	std::bind(&PokeGServer::ProcessRecv, this, std::placeholders::_1,std::placeholders::_2,std::placeholders::_3) });
+	CompFuncMap.insert({ COMP_TYPE::OP_SEND,	std::bind(&PokeGServer::ProcessSend, this, std::placeholders::_1,std::placeholders::_2,std::placeholders::_3) });
+
 }
 
-IOCPServer::~IOCPServer()
+PokeGServer::~PokeGServer()
 {
 }
 
-bool IOCPServer::Init(const int WNum)
+bool PokeGServer::Init(const int WNum)
 {
 	// MapMgr Init
 	MapMgr::Instance()->Init();
@@ -47,7 +52,7 @@ bool IOCPServer::Init(const int WNum)
 	return true;
 }
 
-bool IOCPServer::BindListen(const int PortNum)
+bool PokeGServer::BindListen(const int PortNum)
 {
 	SOCKADDR_IN server_addr;
 	ZeroMemory(&server_addr, sizeof(server_addr));
@@ -78,7 +83,7 @@ bool IOCPServer::BindListen(const int PortNum)
 	return true;
 }
 
-void IOCPServer::StartServer()
+void PokeGServer::StartServer()
 {
 	ClientMgr::Instance()->InitNPC();
 	TimerMgr::Instance()->SetIOCP(&hIocp);
@@ -87,10 +92,10 @@ void IOCPServer::StartServer()
 	{
 		WorkerThreads.emplace_back([this]() { Worker(); });
 	}
-	TimerThread = std::thread{ &IOCPServer::Timer, this };
+	TimerThread = std::thread{ &PokeGServer::Timer, this };
 }
 
-void IOCPServer::Worker()
+void PokeGServer::Worker()
 {
 	while (true)
 	{
@@ -106,8 +111,8 @@ void IOCPServer::Worker()
 		if (FALSE == ret)
 		{
 			int err_no = WSAGetLastError();
-			LogUtil::error_display("GQCS Error : ");
-			LogUtil::error_display(err_no);
+			LogUtil::Log("GQCS Error : ");
+			LogUtil::ErrorDisplay(err_no);
 			Disconnect(client_id);
 			if (Exp->_comp_type == COMP_TYPE::OP_SEND)
 				delete Exp;
@@ -120,32 +125,18 @@ void IOCPServer::Worker()
 			 	ClientMgr::Instance()->Disconnect(client_id);
 		}
 
-		switch (Exp->_comp_type)
+		if (CompFuncMap.find(Exp->_comp_type) != CompFuncMap.end())
 		{
-			case COMP_TYPE::OP_ACCEPT:
-				ProcessAccept(Exp);
-				break;
-			case COMP_TYPE::OP_RECV:
-				ClientMgr::Instance()->RecvProcess(client_id, num_byte, Exp);
-				break;
-			case COMP_TYPE::OP_SEND:
-				//delete Exp;
-				break;
-			case COMP_TYPE::OP_NPC_MOVE:
-				ClientMgr::Instance()->ProcessNPCMove(client_id, Exp);
-				//delete Exp;
-				break;
-			case COMP_TYPE::OP_SPAWN_PLAYER:
-				ClientMgr::Instance()->ProcessClientSpawn(client_id);
-				//delete Exp;
-				break;
-		default:
-			break;
+			CompFuncMap[Exp->_comp_type](client_id, num_byte, Exp);
+		}
+		else
+		{
+			assert(false);
 		}
 	}
 }
 
-void IOCPServer::Timer()
+void PokeGServer::Timer()
 {
 	TimerMgr* TimerInstance = TimerMgr::Instance();
 	while (true)
@@ -154,7 +145,7 @@ void IOCPServer::Timer()
 	}
 }
 
-void IOCPServer::ThreadJoin()
+void PokeGServer::ThreadJoin()
 {
 	for (auto& t : WorkerThreads)
 	{
@@ -162,12 +153,12 @@ void IOCPServer::ThreadJoin()
 	}
 }
 
-void IOCPServer::Disconnect(int Id)
+void PokeGServer::Disconnect(int Id)
 {
 	ClientMgr::Instance()->Disconnect(Id);
 }
 
-void IOCPServer::ReadyAccept()
+void PokeGServer::ReadyAccept()
 {
 	SOCKET c_socket = WSASocket(AF_INET, SOCK_STREAM, IPPROTO_TCP, 0, 0, WSA_FLAG_OVERLAPPED);
 	char	accept_buf[sizeof(SOCKADDR_IN) * 2 + 32 + 100];
@@ -180,7 +171,7 @@ void IOCPServer::ReadyAccept()
 		sizeof(SOCKADDR_IN) + 16, NULL, &AcceptExpOver->_over);
 }
 
-void IOCPServer::ProcessAccept(OverExpansion* exp)
+void PokeGServer::ProcessAccept(int id, int byte, OverExpansion* exp)
 {
 	if (ClientMgr::Instance()->GetClientCount() < MAX_USER)
 	{
@@ -205,5 +196,27 @@ void IOCPServer::ProcessAccept(OverExpansion* exp)
 	{
 	 	std::cerr << "Client MAX!" << std::endl;
 	}
+}
+
+void PokeGServer::ProcessRecv(int id, int byte, OverExpansion* exp)
+{
+	ClientMgr::Instance()->RecvProcess(id, byte, exp);
+}
+
+void PokeGServer::ProcessSend(int id, int byte, OverExpansion* exp)
+{
+	delete exp;
+}
+
+void PokeGServer::ProcessNPCMove(int id, int byte, OverExpansion* exp)
+{
+	ClientMgr::Instance()->ProcessNPCMove(id, exp);
+	//delete exp;
+}
+
+void PokeGServer::ProcessClientSpawn(int id, int byte, OverExpansion* exp)
+{
+	ClientMgr::Instance()->ProcessClientSpawn(id);
+	//delete exp;
 }
  

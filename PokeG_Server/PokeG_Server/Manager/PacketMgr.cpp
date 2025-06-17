@@ -5,14 +5,20 @@
 
 #include "../Client.h"
 //#include "../TimerEvent.h"
+#include "../Util/LogUtil.h"
 
 void PacketMgr::ProcessPacket(PACKET* packet, std::shared_ptr<Client> c)
 {
+	assert(c->ClientNum >= 0 && c->ClientNum < MAX_USER);
+	assert(packet);
+
 	switch (packet->type)
 	{
 	case CS_LOGIN:
 	{
-		ClientMgr::Instance()->ProcessLogin(reinterpret_cast<CS_LOGIN_PACKET*>(packet), c);
+		CS_LOGIN_PACKET* loginPacket = static_cast<CS_LOGIN_PACKET*>(packet);
+		ClientMgr::Instance()->ProcessLogin(loginPacket, c);
+		LogUtil::Log("Client {} logged in with name: {}", c->ClientNum, loginPacket->name);
 		break;
 	}
 	case CS_MOVE:

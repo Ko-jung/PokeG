@@ -90,6 +90,8 @@ void Client::Recv()
 
 void Client::RecvProcess(int byte, OverExpansion* exp)
 {
+	assert(ClientNum >= 0 && ClientNum < MAX_USER);
+
 	int RemainData = byte + RemainDataLen;
 	char* Buf = exp->_send_buf;
 
