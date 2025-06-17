@@ -5,6 +5,8 @@
 
 #include "IOCPServer.h"
 
+#define UNICODE
+
 int main()
 {
 	setlocale(LC_ALL, "");

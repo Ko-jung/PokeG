@@ -42,7 +42,7 @@ bool PokeGServer::Init(const int WNum)
 	ListenSocket = WSASocket(AF_INET, SOCK_STREAM, IPPROTO_TCP, 0, 0, WSA_FLAG_OVERLAPPED);
 	if (INVALID_SOCKET == ListenSocket)
 	{
-		LogUtil::error_display(WSAGetLastError());
+		LogUtil::ErrorDisplay(WSAGetLastError());
 		return false;
 	}
 
@@ -63,14 +63,14 @@ bool PokeGServer::BindListen(const int PortNum)
 	int retval = bind(ListenSocket, reinterpret_cast<sockaddr*>(&server_addr), sizeof(server_addr));
 	if (0 != retval)
 	{
-		LogUtil::error_display(WSAGetLastError());
+		LogUtil::ErrorDisplay(WSAGetLastError());
 		return false;
 	}
 
 	retval = listen(ListenSocket, SOMAXCONN);
 	if (0 != retval)
 	{
-		LogUtil::error_display(WSAGetLastError());
+		LogUtil::ErrorDisplay(WSAGetLastError());
 		return false;
 	}
 

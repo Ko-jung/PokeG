@@ -50,14 +50,18 @@ struct PACKET
 struct CS_LOGIN_PACKET : PACKET {
 	char	name[NAME_SIZE];
 
-	CS_LOGIN_PACKET() : PACKET(CS_LOGIN) { size = sizeof(CS_LOGIN_PACKET); }
+	CS_LOGIN_PACKET() : PACKET(CS_LOGIN)
+	{
+		size = sizeof(CS_LOGIN_PACKET);
+		memset(name, 0, NAME_SIZE);
+	}
 };
 
 struct CS_MOVE_PACKET : PACKET {
 	char	direction;  // 0 : UP, 1 : DOWN, 2 : LEFT, 3 : RIGHT
 	unsigned	move_time;
 
-	CS_MOVE_PACKET() : PACKET(CS_MOVE) { size = sizeof(CS_MOVE_PACKET); }
+	CS_MOVE_PACKET() : PACKET(CS_MOVE) { direction = 0; size = sizeof(CS_MOVE_PACKET); }
 };
 
 struct CS_8DIRECT_MOVE_PACKET : PACKET {

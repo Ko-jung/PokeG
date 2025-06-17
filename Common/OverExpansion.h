@@ -24,6 +24,7 @@ public:
 		_wsabuf.buf = _send_buf;
 		_comp_type = COMP_TYPE::OP_RECV;
 		ZeroMemory(&_over, sizeof(_over));
+		_ai_target_obj = -1;
 	}
 	OverExpansion(char* packet)
 	{
@@ -32,5 +33,6 @@ public:
 		ZeroMemory(&_over, sizeof(_over));
 		_comp_type = COMP_TYPE::OP_SEND;
 		memcpy(_send_buf, packet, _wsabuf.len);
+		_ai_target_obj = -1;
 	}
 };

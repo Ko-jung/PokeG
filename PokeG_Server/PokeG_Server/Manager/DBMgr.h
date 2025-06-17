@@ -3,7 +3,6 @@
 #include "../Define.h"
 #include "../../../Common/protocol.h"
 
-#define UNICODE  
 #include <windows.h>
 #include <sqlext.h>
 
