@@ -54,6 +54,18 @@
     <ClCompile Include="Monster.cpp">
       <Filter>소스 파일\Monster</Filter>
     </ClCompile>
+    <ClCompile Include="Manager\Source\ClientMgr.cpp">
+      <Filter>소스 파일\Manager\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Client.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Packet.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Manager\Source\PacketMgr.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -137,13 +149,28 @@
     <ClInclude Include="Monster.h">
       <Filter>소스 파일\Monster</Filter>
     </ClInclude>
-    <ClInclude Include="OverExpasion.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="Protocol.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Enum.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Manager\Header\ClientMgr.h">
+      <Filter>소스 파일\Manager\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Define.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Client.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="OverExpansion.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Packet.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Manager\Header\PacketMgr.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

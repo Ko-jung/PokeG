@@ -19,19 +19,28 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Client.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Manager\Source\ClientMgr.cpp" />
     <ClCompile Include="Manager\Source\MonsterMgr.cpp" />
+    <ClCompile Include="Manager\Source\PacketMgr.cpp" />
     <ClCompile Include="Manager\Source\PokeG_Server.cpp" />
     <ClCompile Include="Monster.cpp" />
+    <ClCompile Include="Packet.cpp" />
     <ClCompile Include="Util\JsonParser.cpp" />
     <ClCompile Include="Util\UtilLog.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Client.h" />
+    <ClInclude Include="Define.h" />
     <ClInclude Include="Enum.h" />
+    <ClInclude Include="Manager\Header\ClientMgr.h" />
     <ClInclude Include="Manager\Header\MonsterMgr.h" />
+    <ClInclude Include="Manager\Header\PacketMgr.h" />
     <ClInclude Include="Manager\Header\PokeG_Server.h" />
     <ClInclude Include="Monster.h" />
-    <ClInclude Include="OverExpasion.h" />
+    <ClInclude Include="OverExpansion.h" />
+    <ClInclude Include="Packet.h" />
     <ClInclude Include="Protocol.h" />
     <ClInclude Include="rapidjson\allocators.h" />
     <ClInclude Include="rapidjson\cursorstreamwrapper.h" />

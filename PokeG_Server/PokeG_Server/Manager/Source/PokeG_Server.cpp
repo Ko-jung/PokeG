@@ -4,16 +4,39 @@
 
 #include <iostream>
 
+#include "../../Manager/Header/ClientMgr.h"
+
 PokeG_Server::PokeG_Server()
 {
 	AcceptExpOver = new OverExpansion;
-	CompFuncMap			[COMP_TYPE::OP_ACCEPT] = [this](OverExpansion* exp) { this->ProcessAccept(exp); };
-	CompFuncMap.insert({ COMP_TYPE::OP_RECV,	std::bind(&PokeG_Server::ProcessRecv, this, std::placeholders::_1) });
-	CompFuncMap.insert({ COMP_TYPE::OP_SEND,	std::bind(&PokeG_Server::ProcessSend, this, std::placeholders::_1) });
+	Iocp = NULL;
+	ListenSocket = INVALID_SOCKET;
+	WorkerNum = 0;
+
+	CompFuncMap			[COMP_TYPE::OP_ACCEPT] = [this](int id, int byte, OverExpansion* exp) { this->ProcessAccept(id, byte, exp); };
+	CompFuncMap.insert({ COMP_TYPE::OP_RECV,	std::bind(&PokeG_Server::ProcessRecv, this, std::placeholders::_1,std::placeholders::_2,std::placeholders::_3) });
+	CompFuncMap.insert({ COMP_TYPE::OP_SEND,	std::bind(&PokeG_Server::ProcessSend, this, std::placeholders::_1,std::placeholders::_2,std::placeholders::_3) });
 }
 
 PokeG_Server::~PokeG_Server()
 {
+	if (AcceptExpOver)
+	{
+		delete AcceptExpOver;
+		AcceptExpOver = nullptr;
+	}
+	if (ListenSocket != INVALID_SOCKET)
+	{
+		closesocket(ListenSocket);
+		ListenSocket = INVALID_SOCKET;
+	}
+	if (Iocp)
+	{
+		CloseHandle(Iocp);
+		Iocp = NULL;
+	}
+	WSACleanup();
+
 }
 
 bool PokeG_Server::Init()
@@ -80,12 +103,12 @@ void PokeG_Server::ReadyAccept()
 	SOCKET c_socket = WSASocket(AF_INET, SOCK_STREAM, IPPROTO_TCP, 0, 0, WSA_FLAG_OVERLAPPED);
 	char	accept_buf[sizeof(SOCKADDR_IN) * 2 + 32 + 100];
 
-	*(reinterpret_cast<SOCKET*>(&AcceptExpOver->_send_buf)) = c_socket;
-	ZeroMemory(&AcceptExpOver->_over, sizeof(AcceptExpOver->_over));
-	AcceptExpOver->_comp_type = COMP_TYPE::OP_ACCEPT;
+	*(reinterpret_cast<SOCKET*>(&AcceptExpOver->SendBuf)) = c_socket;
+	ZeroMemory(&AcceptExpOver->Over, sizeof(AcceptExpOver->Over));
+	AcceptExpOver->CompType = COMP_TYPE::OP_ACCEPT;
 
 	AcceptEx(ListenSocket, c_socket, accept_buf, 0, sizeof(SOCKADDR_IN) + 16,
-		sizeof(SOCKADDR_IN) + 16, NULL, &AcceptExpOver->_over);
+		sizeof(SOCKADDR_IN) + 16, NULL, &AcceptExpOver->Over);
 }
 
 void PokeG_Server::Disconnect(int Id)
@@ -110,7 +133,7 @@ void PokeG_Server::Worker()
 
 		BOOL ret = GetQueuedCompletionStatus(Iocp, &NumByte, (PULONG_PTR)&IocpKey, &p_over, INFINITE);
 
-		int client_id = static_cast<int>(IocpKey);
+		int ClientId = static_cast<int>(IocpKey);
 		OverExpansion* Exp = reinterpret_cast<OverExpansion*>(p_over);
 		
 		if (FALSE == ret)
@@ -118,62 +141,68 @@ void PokeG_Server::Worker()
 			int err_no = WSAGetLastError();
 			UtilLog::Log("GQCS Error : ");
 			UtilLog::ErrorDisplay(err_no);
-			Disconnect(client_id);
-			if (Exp->_comp_type == COMP_TYPE::OP_SEND)
+			Disconnect(ClientId);
+			if (Exp->CompType == COMP_TYPE::OP_SEND)
 				delete Exp;
 			continue;
 		}
 
 		if (0 == NumByte)
 		{
-			if (Exp->_comp_type == COMP_TYPE::OP_SEND || Exp->_comp_type == COMP_TYPE::OP_RECV)
+			if (Exp->CompType == COMP_TYPE::OP_SEND || Exp->CompType == COMP_TYPE::OP_RECV)
 				UtilLog::Log("0 == NumByte");
-				//ClientMgr::Instance()->Disconnect(client_id);
+				//ClientMgr::Instance()->Disconnect(ClientId);
 		}
 
-		if (CompFuncMap.find(Exp->_comp_type) != CompFuncMap.end())
+		if (CompFuncMap.find(Exp->CompType) != CompFuncMap.end())
 		{
-			CompFuncMap[Exp->_comp_type](Exp);
+			CompFuncMap[Exp->CompType](ClientId, NumByte, Exp);
 		}
 		else
 		{
-			assert(false, "Unknown Completion Type");
+			assert(false);
 		}
 	}
 }
 
-void PokeG_Server::ProcessAccept(OverExpansion* exp)
+void PokeG_Server::ProcessAccept(int id, int bytes, OverExpansion* exp)
 {
-	//if (ClientMgr::Instance()->GetClientCount() < MAX_USER)
-	//{
-	//	int NowClientNum;
-	//	std::shared_ptr<Client> NewClient = ClientMgr::Instance()->GetEmptyClient(NowClientNum);
-	//	if (NewClient == nullptr)
-	//	{
-	//		std::cerr << "Client NULL!" << std::endl;
-	//		return;
-	//	}
-	//
-	//	NewClient->ClientNum = NowClientNum;
-	//	NewClient->Socket = (*(reinterpret_cast<SOCKET*>(exp->_send_buf)));
-	//
-	//	CreateIoCompletionPort(reinterpret_cast<HANDLE>(NewClient->Socket), hIocp, NowClientNum, 0);
-	//
-	//	NewClient->Recv();
-	//
-	//	ReadyAccept();
-	//}
-	//else
-	//{
-	//	std::cerr << "Client MAX!" << std::endl;
-	//}
+	if (ClientMgr::Instance()->GetClientCount() < MAX_USER)
+	{
+		int NowClientNum;
+		std::shared_ptr<Client> NewClient = ClientMgr::Instance()->GetEmptyClient(NowClientNum);
+		if (NewClient == nullptr)
+		{
+			UtilLog::Log("Client NULL!");
+			//std::cerr << "Client NULL!" << std::endl;
+			return;
+		}
+	
+		NewClient->ClientNum = NowClientNum;
+		NewClient->Socket = (*(reinterpret_cast<SOCKET*>(exp->SendBuf)));
+	
+		CreateIoCompletionPort(reinterpret_cast<HANDLE>(NewClient->Socket), Iocp, NowClientNum, 0);
+	
+		NewClient->Recv();
+	
+		ReadyAccept();
+
+		UtilLog::Log("Client {} Attecpt", NowClientNum);
+	}
+	else
+	{
+		UtilLog::Log("Client MAX!");
+		//std::cerr << "Client MAX!" << std::endl;
+	}
 }
 
-void PokeG_Server::ProcessRecv(OverExpansion* exp)
+void PokeG_Server::ProcessRecv(int id, int bytes, OverExpansion* exp)
 {
+	ClientMgr::Instance()->ProcessRecv(id, bytes, exp);
+	delete exp;
 }
 
-void PokeG_Server::ProcessSend(OverExpansion* exp)
+void PokeG_Server::ProcessSend(int id, int bytes, OverExpansion* exp)
 {
 	delete exp;
 }
@@ -181,7 +210,7 @@ void PokeG_Server::ProcessSend(OverExpansion* exp)
 void PokeG_Server::Start()
 {
 	Init();
-	BindListen(9998);
+	BindListen(9000);
 	CreateThread();
 	ThreadJoin();
 }

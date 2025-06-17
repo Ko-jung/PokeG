@@ -2,7 +2,7 @@
 
 #include "../../stdafx.h"
 #include "../../Enum.h"
-#include "../../OverExpasion.h"
+#include "../../OverExpansion.h"
 
 #include <unordered_map>
 #include <functional>
@@ -25,10 +25,10 @@ public:
 
 	void Worker();
 
-	std::unordered_map<COMP_TYPE, std::function<void(OverExpansion*)>> CompFuncMap;
-	void ProcessAccept(OverExpansion* exp);
-	void ProcessRecv(OverExpansion* exp);
-	void ProcessSend(OverExpansion* exp);
+	std::unordered_map<COMP_TYPE, std::function<void(int, int, OverExpansion*)>> CompFuncMap;
+	void ProcessAccept(	int id, int bytes, OverExpansion* exp);
+	void ProcessRecv(	int id, int bytes, OverExpansion* exp);
+	void ProcessSend(	int id, int bytes, OverExpansion* exp);
 
 private:
 	std::vector<std::thread> WorkerThreads;
