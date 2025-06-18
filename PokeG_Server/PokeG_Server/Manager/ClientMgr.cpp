@@ -50,7 +50,7 @@ void ClientMgr::InitNPC()
 		Clients[i]->Direction = ACTOR_DIRECTION::DOWN;
 		Clients[i]->State = CLIENT_STATE::INGAME;
 
-		SectorMgr::Instance()->UnsafeInsert(Clients[i]);
+		//SectorMgr::Instance()->UnsafeInsert(Clients[i]);
 	}
 	std::cout << "InitNPC end.\n";
 }
@@ -143,108 +143,108 @@ void ClientMgr::MapCollisionCheck(int id)
 
 void ClientMgr::SendPosToOtherClientUseSector(std::shared_ptr<Client> c)
 {
-	int	CurrSectorXPos = (int)c->Position.X / SECTORSIZE;
-	int CurrSectorYPos = (int)c->Position.Y / SECTORSIZE;
-	std::unordered_set<std::shared_ptr<Client>> new_vl;
-	// 0, 0 -> 2, 2 까지 9섹터 검색 8,9
-	for (int i = 0; i < 9; i++)
-	{
-		int Y = CurrSectorYPos + i / 3 - 1;
-		int X = CurrSectorXPos + i % 3 - 1;
-
-		if (X < 0 || X >= W_WIDTH || Y < 0 || Y >= W_HEIGHT) continue;
-
-		Sector* sector = SectorMgr::Instance()->GetSector(X, Y);
-		sector->SectorLock.lock();
-		for (auto& cl : sector->SectorClient)
-		{
-			if (cl->State != CLIENT_STATE::INGAME) continue;
-			if (cl->ClientNum == c->ClientNum) continue;
-			if (CanSee(cl, c))
-			{
-				new_vl.insert(cl);
-			}
-		}
-		sector->SectorLock.unlock();
-	}
-
-	c->ViewListLock.lock();
-	std::unordered_set<std::shared_ptr<Client>> OldTargetViewList = c->ViewList;
-	c->ViewListLock.unlock();
-
-	//c->send_move_packet(c_id);
-
-	for (auto& pClient : new_vl)
-	{
-		if (!IsNPC(pClient))
-		{
-			pClient->ViewListLock.lock();
-			if (pClient->ViewList.count(c))
-			{
-				pClient->ViewListLock.unlock();
-				pClient->SendMovePos(c);
-			}
-			else {
-				pClient->ViewListLock.unlock();
-				pClient->SendAddPlayer(c);
-			}
-		}
-		else WakeUpNPC(pClient->ClientNum, c->ClientNum);
-
-		if (OldTargetViewList.count(pClient) == 0)
-		{
-			c->SendAddPlayer(pClient);
-		}
-	}
-
-	for (auto& pClient : OldTargetViewList)
-	{
-		if (0 == new_vl.count(pClient))
-		{
-			c->SendRemovePlayer(pClient);
-			if (!IsNPC(pClient))
-				pClient->SendRemovePlayer(c);
-		}
-	}
+	//int	CurrSectorXPos = (int)c->Position.X / SECTORSIZE;
+	//int CurrSectorYPos = (int)c->Position.Y / SECTORSIZE;
+	//std::unordered_set<std::shared_ptr<Client>> new_vl;
+	//// 0, 0 -> 2, 2 까지 9섹터 검색 8,9
+	//for (int i = 0; i < 9; i++)
+	//{
+	//	int Y = CurrSectorYPos + i / 3 - 1;
+	//	int X = CurrSectorXPos + i % 3 - 1;
+	//
+	//	if (X < 0 || X >= W_WIDTH || Y < 0 || Y >= W_HEIGHT) continue;
+	//
+	//	Sector* sector = SectorMgr::Instance()->GetSector(X, Y);
+	//	sector->SectorLock.lock();
+	//	for (auto& cl : sector->SectorClient)
+	//	{
+	//		if (cl->State != CLIENT_STATE::INGAME) continue;
+	//		if (cl->ClientNum == c->ClientNum) continue;
+	//		if (CanSee(cl, c))
+	//		{
+	//			new_vl.insert(cl);
+	//		}
+	//	}
+	//	sector->SectorLock.unlock();
+	//}
+	//
+	//c->ViewListLock.lock();
+	//std::unordered_set<std::shared_ptr<Client>> OldTargetViewList = c->ViewList;
+	//c->ViewListLock.unlock();
+	//
+	////c->send_move_packet(c_id);
+	//
+	//for (auto& pClient : new_vl)
+	//{
+	//	if (!IsNPC(pClient))
+	//	{
+	//		pClient->ViewListLock.lock();
+	//		if (pClient->ViewList.count(c))
+	//		{
+	//			pClient->ViewListLock.unlock();
+	//			pClient->SendMovePos(c);
+	//		}
+	//		else {
+	//			pClient->ViewListLock.unlock();
+	//			pClient->SendAddPlayer(c);
+	//		}
+	//	}
+	//	else WakeUpNPC(pClient->ClientNum, c->ClientNum);
+	//
+	//	if (OldTargetViewList.count(pClient) == 0)
+	//	{
+	//		c->SendAddPlayer(pClient);
+	//	}
+	//}
+	//
+	//for (auto& pClient : OldTargetViewList)
+	//{
+	//	if (0 == new_vl.count(pClient))
+	//	{
+	//		c->SendRemovePlayer(pClient);
+	//		if (!IsNPC(pClient))
+	//			pClient->SendRemovePlayer(c);
+	//	}
+	//}
 }
 
 void ClientMgr::SendAddPlayerUseSector(std::shared_ptr<Client> c)
 {
-	int	CurrSectorXPos = c->Position.X / SECTORSIZE;
-	int CurrSectorYPos = c->Position.Y / SECTORSIZE;
-	for (int i = 0; i < 9; i++)
-	{
-		int Y = CurrSectorYPos + i / 3 - 1;
-		int X = CurrSectorXPos + i % 3 - 1;
-
-		if (X < 0 || X >= W_WIDTH || Y < 0 || Y >= W_HEIGHT) continue;
-
-		Sector* sector = SectorMgr::Instance()->GetSector(X, Y);
-		sector->SectorLock.lock();
-		for (auto& pClient : sector->SectorClient)
-		{
-			{
-				std::lock_guard<std::mutex> ll(pClient->StateMutex);
-				if (CLIENT_STATE::INGAME != pClient->State) continue;
-			}
-			if (pClient->ClientNum == c->ClientNum) continue;
-			if (false == CanSee(c, pClient)) continue;
-			if (!IsNPC(pClient))
-				pClient->SendAddPlayer(c);
-			else WakeUpNPC(pClient->ClientNum, c->ClientNum);
-			c->SendAddPlayer(pClient);
-		}
-		sector->SectorLock.unlock();
-	}
+	//int	CurrSectorXPos = c->Position.X / SECTORSIZE;
+	//int CurrSectorYPos = c->Position.Y / SECTORSIZE;
+	//for (int i = 0; i < 9; i++)
+	//{
+	//	int Y = CurrSectorYPos + i / 3 - 1;
+	//	int X = CurrSectorXPos + i % 3 - 1;
+	//
+	//	if (X < 0 || X >= W_WIDTH || Y < 0 || Y >= W_HEIGHT) continue;
+	//
+	//	Sector* sector = SectorMgr::Instance()->GetSector(X, Y);
+	//	sector->SectorLock.lock();
+	//	for (auto& pClient : sector->SectorClient)
+	//	{
+	//		{
+	//			std::lock_guard<std::mutex> ll(pClient->StateMutex);
+	//			if (CLIENT_STATE::INGAME != pClient->State) continue;
+	//		}
+	//		if (pClient->ClientNum == c->ClientNum) continue;
+	//		if (false == CanSee(c, pClient)) continue;
+	//		if (!IsNPC(pClient))
+	//			pClient->SendAddPlayer(c);
+	//		else WakeUpNPC(pClient->ClientNum, c->ClientNum);
+	//		c->SendAddPlayer(pClient);
+	//	}
+	//	sector->SectorLock.unlock();
+	//}
 }
 
 void ClientMgr::NPCRandomMove(std::shared_ptr<Client> NPC)
 {
-	// 1. make OldViewList
-	std::unordered_set<std::shared_ptr<Client>> OldViewList;
-
-	//이때 오류가 없는지 확인 동접 1만까진 가보자
-	SectorMgr::Instance()->MakeViewList(OldViewList, NPC);
+	// // 1. make OldViewList
+	// std::unordered_set<std::shared_ptr<Client>> OldViewList;
+	// 
+	// //이때 오류가 없는지 확인 동접 1만까진 가보자
+	// SectorMgr::Instance()->MakeViewList(OldViewList, NPC);
 	
 	//std::unordered_set<int> OldViewList;
 	//for (int i = 0; i < 9; i++)
@@ -268,54 +268,54 @@ void ClientMgr::NPCRandomMove(std::shared_ptr<Client> NPC)
 	//	sector->SectorLock.lock();
 	//}
 
-	// // 2. Move Random NPC Pos
-	// int	x = NPC->Position.X;
-	// int y = NPC->Position.Y;
-	// int PrevSectorXPos = x / SECTORSIZE;
-	// int PrevSectorYPos = y / SECTORSIZE;
-	// int MoveDirect = rand() % 4;
-	// switch (MoveDirect)
-	// {
-	// case 0: if (x < (W_WIDTH - 1)) x++; break;
-	// case 1: if (x > 0) x--; break;
-	// case 2: if (y < (W_HEIGHT - 1)) y++; break;
-	// case 3:if (y > 0) y--; break;
-	// }
-	// if ((MAP_INFO)MapMgr::Instance()->GetMapInfo(x, y) == MAP_INFO::WALLS_BLOCK)
-	// {
-	// 	switch (MoveDirect)
-	// 	{
-	// 	case 0: if (x < (W_WIDTH - 1)) x--; break;
-	// 	case 1: if (x > 0) x++; break;
-	// 	case 2: if (y < (W_HEIGHT - 1)) y--; break;
-	// 	case 3:if (y > 0) y++; break;
-	// 	}
-	// }
-	// int CurrSectorXPos = x / SECTORSIZE;
-	// int CurrSectorYPos = y / SECTORSIZE;
-	// 
-	// NPC->Position.X = x;
-	// NPC->Position.Y = y;
-	// 
-	// // moved
-	// // if (x != NPC->Position.X || x != NPC->Position.Y)
-	// // {
-	// // 	NPC->Position.X = x;
-	// // 	NPC->Position.Y = y;
-	// // 	// no data race
-	// // 	if (NPC->_move_count > 0)
-	// // 	{
-	// // 		if (--NPC->_move_count == 0)
-	// // 		{
-	// // 			NPC->_ll.lock();
-	// // 			lua_getglobal(NPC->_L, "event_say_bye");
-	// // 			lua_pushnumber(NPC->_L, NPC->_target_obj);
-	// // 			lua_pcall(NPC->_L, 1, 0, 0);
-	// // 			NPC->_ll.unlock();
-	// // 		}
-	// // 
-	// // 	}
-	// // }
+	 // 2. Move Random NPC Pos
+	 int x = NPC->Position.X;
+	 int y = NPC->Position.Y;
+	 int PrevSectorXPos = x / SECTORSIZE;
+	 int PrevSectorYPos = y / SECTORSIZE;
+	 int MoveDirect = rand() % 4;
+	 switch (MoveDirect)
+	 {
+	 case 0: if (x < (W_WIDTH - 1)) x++; break;
+	 case 1: if (x > 0) x--; break;
+	 case 2: if (y < (W_HEIGHT - 1)) y++; break;
+	 case 3:if (y > 0) y--; break;
+	 }
+	 if ((MAP_INFO)MapMgr::Instance()->GetMapInfo(x, y) == MAP_INFO::WALLS_BLOCK)
+	 {
+	 	switch (MoveDirect)
+	 	{
+	 	case 0: if (x < (W_WIDTH - 1)) x--; break;
+	 	case 1: if (x > 0) x++; break;
+	 	case 2: if (y < (W_HEIGHT - 1)) y--; break;
+	 	case 3:if (y > 0) y++; break;
+	 	}
+	 }
+	 int CurrSectorXPos = x / SECTORSIZE;
+	 int CurrSectorYPos = y / SECTORSIZE;
+	 
+	 NPC->Position.X = x;
+	 NPC->Position.Y = y;
+	 
+	  // // moved
+	  // if (x != NPC->Position.X || x != NPC->Position.Y)
+	  // {
+	  // 	NPC->Position.X = x;
+	  // 	NPC->Position.Y = y;
+	  // 	// no data race
+	  // 	if (NPC->_move_count > 0)
+	  // 	{
+	  // 		if (--NPC->_move_count == 0)
+	  // 		{
+	  // 			NPC->_ll.lock();
+	  // 			lua_getglobal(NPC->_L, "event_say_bye");
+	  // 			lua_pushnumber(NPC->_L, NPC->_target_obj);
+	  // 			lua_pcall(NPC->_L, 1, 0, 0);
+	  // 			NPC->_ll.unlock();
+	  // 		}
+	  // 
+	  // 	}
+	  // }
 	// 
 	// // 2-2. Checking SECTOR
 	// SectorMgr::Instance()->MoveSector(NPC, PrevSectorXPos, PrevSectorYPos);
@@ -386,7 +386,7 @@ bool ClientMgr::IsNPC(const std::shared_ptr<Client> Target)
 
 void ClientMgr::ProcessClientDie(std::shared_ptr<Client> Target)
 {
-	SectorMgr::Instance()->Remove(Target);
+	//SectorMgr::Instance()->Remove(Target);
 	if (IsNPC(Target))
 	{
 		int TargetIndex = Target->ClientNum;
@@ -423,7 +423,7 @@ void ClientMgr::ProcessClientSpawn(int id)
 	Target->Position.Y = 100;
 	Target->CurrentHP = 100;
 	Target->MaxHP = 100;
-	SectorMgr::Instance()->Insert(Target);
+	//SectorMgr::Instance()->Insert(Target);
 
 	SC_ADD_OBJECT_PACKET SAOP;
 	SAOP.hp = Target->CurrentHP;
@@ -435,7 +435,7 @@ void ClientMgr::ProcessClientSpawn(int id)
 	strcpy_s(SAOP.name, Target->PlayerName);
 
 	std::unordered_set<std::shared_ptr<Client>> ViewList;
-	SectorMgr::Instance()->MakeViewList(ViewList, Target);
+	//SectorMgr::Instance()->MakeViewList(ViewList, Target);
 	for (const auto& pClient : ViewList)
 	{
 		pClient->Send(&SAOP);
@@ -462,7 +462,7 @@ void ClientMgr::ProcessLogin(CS_LOGIN_PACKET* CLP, std::shared_ptr<Client> c)
 
 
 	// ADD SECTOR
-	SectorMgr::Instance()->Insert(c);
+	// SectorMgr::Instance()->Insert(c);
 	// ==========
 	
 	SendAddPlayerUseSector(c);
@@ -485,52 +485,52 @@ void ClientMgr::ProcessNPCMove(int id, OverExpansion* exp)
 	std::shared_ptr<Client> NPC = Clients[id];
 	bool KeepAlive = false;
 
-	SectorMgr* p = SectorMgr::Instance();
-	int Y;
-	int X;
-
-	for (int i = 0; i < 9; i++)
-	{
-		Y = (NPC->Position.Y / SECTORSIZE) + i / 3 - 1;
-		X = (NPC->Position.X / SECTORSIZE) + i % 3 - 1;
-
-		if (X < 0 || X >= W_WIDTH || Y < 0 || Y >= W_HEIGHT) continue;
-
-		Sector* sector = SectorMgr::Instance()->GetSector(X,Y);
-		sector->SectorLock.lock();
-		int j = 0;
-		for (auto& pClient : sector->SectorClient)
-		{
-			assert(pClient != nullptr);
-			
-			pClient->StateMutex.lock();
-			if (pClient->State == CLIENT_STATE::INGAME && CanSee(NPC, pClient))
-			{
-				pClient->StateMutex.unlock();
-				KeepAlive = true;
-				i = 9;
-				break;
-			}
-			pClient->StateMutex.unlock();
-			j++;
-		}
-		sector->SectorLock.unlock();
-	}
-
-	if (KeepAlive)
-	{
-		NPC->IsActive = true;
-
-		//NPCRandomMove(NPC);
-		
-		std::shared_ptr<TimerEvent> evnt = std::make_shared<TimerEvent>(id,
-			std::chrono::system_clock::now() + std::chrono::seconds(1), EVENT_TYPE::EV_RANDOM_MOVE, 0 );
-		TimerMgr::Instance()->Insert(evnt);
-	}
-	else
-	{
-		NPC->IsActive = false;
-	}
+	// SectorMgr* p = SectorMgr::Instance();
+	// int Y;
+	// int X;
+	// 
+	// for (int i = 0; i < 9; i++)
+	// {
+	// 	Y = (NPC->Position.Y / SECTORSIZE) + i / 3 - 1;
+	// 	X = (NPC->Position.X / SECTORSIZE) + i % 3 - 1;
+	// 
+	// 	if (X < 0 || X >= W_WIDTH || Y < 0 || Y >= W_HEIGHT) continue;
+	// 
+	// 	Sector* sector = SectorMgr::Instance()->GetSector(X,Y);
+	// 	sector->SectorLock.lock();
+	// 	int j = 0;
+	// 	for (auto& pClient : sector->SectorClient)
+	// 	{
+	// 		assert(pClient != nullptr);
+	// 		
+	// 		pClient->StateMutex.lock();
+	// 		if (pClient->State == CLIENT_STATE::INGAME && CanSee(NPC, pClient))
+	// 		{
+	// 			pClient->StateMutex.unlock();
+	// 			KeepAlive = true;
+	// 			i = 9;
+	// 			break;
+	// 		}
+	// 		pClient->StateMutex.unlock();
+	// 		j++;
+	// 	}
+	// 	sector->SectorLock.unlock();
+	// }
+	// 
+	// if (KeepAlive)
+	// {
+	// 	NPC->IsActive = true;
+	// 
+	// 	//NPCRandomMove(NPC);
+	// 	
+	// 	std::shared_ptr<TimerEvent> evnt = std::make_shared<TimerEvent>(id,
+	// 		std::chrono::system_clock::now() + std::chrono::seconds(1), EVENT_TYPE::EV_RANDOM_MOVE, 0 );
+	// 	TimerMgr::Instance()->Insert(evnt);
+	// }
+	// else
+	// {
+	// 	NPC->IsActive = false;
+	// }
 }
 
 void ClientMgr::ProcessAttack(CS_ATTACK_PACKET* CAP, std::shared_ptr<Client> c)
@@ -572,19 +572,19 @@ void ClientMgr::ProcessAttack(CS_ATTACK_PACKET* CAP, std::shared_ptr<Client> c)
 
 	std::unordered_set<std::shared_ptr<Client>> SectorClient;
 	std::unordered_set<std::shared_ptr<Client>> CollideClient;
-	SectorMgr::Instance()->MakeViewList(SectorClient, c, true);
-	// Apply Damage
-	for (auto& pClient : SectorClient)
-	{
-		RectF TargetCollisionBox = pClient->GetCollisionFBox();
-		if (CollisionChecker::CollisionCheck(TargetCollisionBox, AttackCollisionBox))
-		{
-			if (pClient->CurrentHP <= 0) continue;
-
-			bool IsDead = pClient->ApplyDamage(c, WeaponDamage);
-			CollideClient.insert(pClient);
-		}
-	}
+	// SectorMgr::Instance()->MakeViewList(SectorClient, c, true);
+	// // Apply Damage
+	// for (auto& pClient : SectorClient)
+	// {
+	// 	RectF TargetCollisionBox = pClient->GetCollisionFBox();
+	// 	if (CollisionChecker::CollisionCheck(TargetCollisionBox, AttackCollisionBox))
+	// 	{
+	// 		if (pClient->CurrentHP <= 0) continue;
+	// 
+	// 		bool IsDead = pClient->ApplyDamage(c, WeaponDamage);
+	// 		CollideClient.insert(pClient);
+	// 	}
+	// }
 
 	// Send Result
 	SectorClient.insert(c);
@@ -607,28 +607,28 @@ void ClientMgr::ProcessAttack(CS_ATTACK_PACKET* CAP, std::shared_ptr<Client> c)
 void ClientMgr::ProcessStateChange(CS_STATE_CHANGE_PACKET* CSCP, std::shared_ptr<Client> c)
 {
 	std::unordered_set<std::shared_ptr<Client>> ViewList;
-	SectorMgr::Instance()->MakeViewList(ViewList, c);
-
-	SC_STATE_CHANGE_PACKET SSCP;
-	SSCP.ChangedState = CSCP->ChangedState;
-	SSCP.id = c->ClientNum;
-	for (const auto& pClient : ViewList)
-	{
-		pClient->Send(&SSCP);
-	}
+	//SectorMgr::Instance()->MakeViewList(ViewList, c);
+	//
+	//SC_STATE_CHANGE_PACKET SSCP;
+	//SSCP.ChangedState = CSCP->ChangedState;
+	//SSCP.id = c->ClientNum;
+	//for (const auto& pClient : ViewList)
+	//{
+	//	pClient->Send(&SSCP);
+	//}
 }
 
 void ClientMgr::ProcessChat(CS_CHAT_PACKET* CCP, std::shared_ptr<Client> c)
 {
 	std::unordered_set<std::shared_ptr<Client>> ViewList;
-	SectorMgr::Instance()->MakeViewList(ViewList, c);
-
-	SC_CHAT_PACKET SCP;
-	SCP.id = c->ClientNum;
-	strcpy_s(SCP.mess, CCP->mess);
-	ViewList.insert(c);
-	for (const auto& pClient : ViewList)
-	{
-		pClient->Send(&SCP);
-	}
+	//SectorMgr::Instance()->MakeViewList(ViewList, c);
+	//
+	//SC_CHAT_PACKET SCP;
+	//SCP.id = c->ClientNum;
+	//strcpy_s(SCP.mess, CCP->mess);
+	//ViewList.insert(c);
+	//for (const auto& pClient : ViewList)
+	//{
+	//	pClient->Send(&SCP);
+	//}
 }

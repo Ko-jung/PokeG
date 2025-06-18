@@ -22,6 +22,7 @@ class SectorMgr
 public:
 	SINGLETON(SectorMgr);
 
+private:
 	void Insert(std::shared_ptr<Client> Target);
 	void UnsafeInsert(std::shared_ptr<Client> Target);
 	void Remove(std::shared_ptr<Client> Target);
@@ -29,12 +30,13 @@ public:
 
 	//Sector* GetSector(int x, int y) { return &Sectors[y][x]; }
 	Sector* GetSector(int x, int y) { 
-		try {
-			return &Sectors.at(y).at(x);
-		}
-		catch (const std::out_of_range& e){
-			std::cout << "Error!: " << e.what() << std::endl;
-		}
+		return &Sectors[y][x];
+		//try {
+		//	return &Sectors.at(y).at(x);
+		//}
+		//catch (const std::out_of_range& e){
+		//	std::cout << "Error!: " << e.what() << std::endl;
+		//}
 	}
 
 	void MakeViewList(std::unordered_set<std::shared_ptr<Client>>& ViewList, std::shared_ptr<Client> Center, bool IncludeNPC = false);

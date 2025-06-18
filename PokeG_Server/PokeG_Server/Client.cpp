@@ -163,7 +163,7 @@ void Client::Move(POSITION NewPos, char direction)
 
 	if (CurrSectorXPos != PrevSectorXPos || CurrSectorYPos != PrevSectorYPos)
 	{
-		SectorMgr::Instance()->MoveSector(shared_from_this(), PrevSectorXPos, PrevSectorYPos);
+		//SectorMgr::Instance()->MoveSector(shared_from_this(), PrevSectorXPos, PrevSectorYPos);
 	}
 }
 
