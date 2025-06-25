@@ -2,6 +2,8 @@
 #include "stdafx.h"
 #include "../../Common/EnumDef.h"
 
+#include <shared_mutex>
+
 class PokeGServer
 {
 public:
@@ -36,6 +38,7 @@ public:
 	int WorkerNum;
 
 private:
+	std::shared_mutex MapMutex;
 	std::unordered_map<COMP_TYPE, std::function<void(int, int, OverExpansion*)>> CompFuncMap;
 };
 

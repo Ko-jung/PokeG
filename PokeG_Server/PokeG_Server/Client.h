@@ -35,6 +35,8 @@ public:
 	std::atomic_bool IsActive;
 	int ClientNum;
 	SOCKET Socket;
+
+	std::mutex ExpMutex;
 	OverExpansion Exp;
 
 	int RemainDataLen;
@@ -53,8 +55,8 @@ public:
 	std::mutex Mutex;
 	std::mutex StateMutex;
 	int LastMoveTime;
-	std::mutex	ViewListLock;
-	std::unordered_set<std::shared_ptr<Client>> ViewList;
+	// std::mutex	ViewListLock;
+	// std::unordered_set<std::shared_ptr<Client>> ViewList;
 
 	static int ImageSpriteWidth;
 	static int ImageSpriteHeight;

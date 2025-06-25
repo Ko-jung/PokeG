@@ -4,6 +4,7 @@
 
 #include "../../Common/protocol.h"
 #include "../../Common/EnumDef.h"
+#include "Util/LogUtil.h"
 
 #include "Manager/PacketMgr.h"
 #include "Manager/MapMgr.h"
@@ -50,21 +51,26 @@ void Client::Init()
 
 void Client::Send(PACKET* p)
 {
-	if (Socket == INVALID_SOCKET)
-	{
-		std::cout << "ClientInfo Socket is INVALID_SOCKET" << std::endl;
-		return;
-	}
+	//if (Socket == INVALID_SOCKET)
+	//{
+	//	std::cout << "ClientInfo Socket is INVALID_SOCKET" << std::endl;
+	//	return;
+	//}
 
 	OverExpansion* exp = new OverExpansion{ (char*)p };
+	WSAOVERLAPPED tmp;
+	ZeroMemory(&tmp, sizeof(tmp));
 
+	//TODO: ÀÌ°Å THread safe?
 	int ret = WSASend(Socket, &exp->_wsabuf, 1, 0, 0, &exp->_over, 0);
+	//assert(memcmp(&exp->_over, &tmp, sizeof(WSAOVERLAPPED)) != 0);
 	if (0 != ret)
 	{
 		int error_num = WSAGetLastError();
 		if (ERROR_IO_PENDING != error_num)
 		{
-			std::cout << "Client::Send() ERROR" << std::endl;
+			LogUtil::Log("Client::Send() Error: ClientNum: {}, ", ClientNum);
+			LogUtil::ErrorDisplay(error_num);
 		}
 	}
 }
@@ -256,23 +262,23 @@ void Client::SendAddPlayer(std::shared_ptr<Client> c)
 	SAOP.hp = c->CurrentHP;
 	SAOP.max_hp= c->MaxHP;
 
-	ViewListLock.lock();
-	ViewList.insert(c);
-	ViewListLock.unlock();
+	//ViewListLock.lock();
+	//ViewList.insert(c);
+	//ViewListLock.unlock();
 
 	Send(&SAOP);
 }
 
 void Client::SendRemovePlayer(std::shared_ptr<Client> c)
 {
-	ViewListLock.lock();
-	if (ViewList.count(c))
-		ViewList.erase(c);
-	else {
-		ViewListLock.unlock();
-		return;
-	}
-	ViewListLock.unlock();
+	//ViewListLock.lock();
+	//if (ViewList.count(c))
+	//	ViewList.erase(c);
+	//else {
+	//	ViewListLock.unlock();
+	//	return;
+	//}
+	//ViewListLock.unlock();
 
 	SC_REMOVE_OBJECT_PACKET SROP;
 	SROP.id = c->ClientNum;

@@ -20,12 +20,18 @@ public:
 
 	void InitNPC();
 	void RecvProcess(int id, int bytes, class OverExpansion* exp);
+	void SendProcess(std::shared_ptr<Client> c, PACKET* packet);
 	void Disconnect(int id);
+
+	bool IsValid(std::shared_ptr<Client> c);
 
 	std::shared_ptr<Client> GetEmptyClient(int& ClientNum);
 	int GetClientCount() { return ClientCount; }
 
 	void MapCollisionCheck(int id);
+
+	void SendPosToOtherClient(std::shared_ptr<Client> c);
+	void SendAddPlayer(std::shared_ptr<Client> c);
 
 	void SendPosToOtherClientUseSector(std::shared_ptr<Client> c);
 	void SendAddPlayerUseSector(std::shared_ptr<Client> c);
@@ -39,7 +45,7 @@ public:
 	void ProcessClientSpawn(int id);
 
 	// From Process Packet
-	void ProcessLogin(CS_LOGIN_PACKET* CLP, std::shared_ptr<Client> c);
+	void ProcessLogin(const CS_LOGIN_PACKET* CLP, std::shared_ptr<Client> c);
 	void ProcessStressTestMove(CS_MOVE_PACKET* CMP, std::shared_ptr<Client> c);
 	void ProcessMove(CS_8DIRECT_MOVE_PACKET* CMP, std::shared_ptr<Client> c);
 	void ProcessNPCMove(int id, OverExpansion* exp);
@@ -50,5 +56,7 @@ public:
 private:
 	std::array<std::shared_ptr<Client>, MAX_USER + MAX_NPC> Clients;
 	std::atomic<int> ClientCount;
+
+	std::mutex AcceptMutex;
 };
 

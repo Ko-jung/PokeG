@@ -21,6 +21,9 @@ PokeGServer::PokeGServer()
 	CompFuncMap[COMP_TYPE::OP_ACCEPT] = [this](int id, int byte, OverExpansion* exp) { this->ProcessAccept(id, byte, exp); };
 	CompFuncMap.insert({ COMP_TYPE::OP_RECV,	std::bind(&PokeGServer::ProcessRecv, this, std::placeholders::_1,std::placeholders::_2,std::placeholders::_3) });
 	CompFuncMap.insert({ COMP_TYPE::OP_SEND,	std::bind(&PokeGServer::ProcessSend, this, std::placeholders::_1,std::placeholders::_2,std::placeholders::_3) });
+	
+	CompFuncMap.insert({ COMP_TYPE::OP_NPC_MOVE,		std::bind(&PokeGServer::ProcessNPCMove, this, std::placeholders::_1,std::placeholders::_2,std::placeholders::_3) });
+	CompFuncMap.insert({ COMP_TYPE::OP_SPAWN_PLAYER,	std::bind(&PokeGServer::ProcessClientSpawn, this, std::placeholders::_1,std::placeholders::_2,std::placeholders::_3) });
 
 }
 
@@ -92,7 +95,7 @@ void PokeGServer::StartServer()
 	{
 		WorkerThreads.emplace_back([this]() { Worker(); });
 	}
-	TimerThread = std::thread{ &PokeGServer::Timer, this };
+	//TimerThread = std::thread{ &PokeGServer::Timer, this };
 }
 
 void PokeGServer::Worker()
@@ -125,24 +128,52 @@ void PokeGServer::Worker()
 			 	ClientMgr::Instance()->Disconnect(client_id);
 		}
 
-		if (CompFuncMap.find(Exp->_comp_type) != CompFuncMap.end())
+		//assert(COMP_TYPE::OP_RECV <= Exp->_comp_type && Exp->_comp_type <= COMP_TYPE::OP_SPAWN_PLAYER
+		//	&& 0 <= Exp->_wsabuf.len && Exp->_wsabuf.len < 30000);
+
+		switch (Exp->_comp_type)
 		{
-			CompFuncMap[Exp->_comp_type](client_id, num_byte, Exp);
-		}
-		else
-		{
+		case COMP_TYPE::OP_ACCEPT:
+			ProcessAccept(client_id, num_byte, Exp);
+			break;
+		case COMP_TYPE::OP_RECV:
+			ProcessRecv(client_id, num_byte, Exp);
+			break;
+		case COMP_TYPE::OP_SEND:
+			ProcessSend(client_id, num_byte, Exp);
+			break;
+		case COMP_TYPE::OP_NPC_MOVE:
+			//ProcessNPCMove(client_id, num_byte, Exp);
+			break;
+		case COMP_TYPE::OP_SPAWN_PLAYER:
+			//ProcessClientSpawn(client_id, num_byte, Exp);
+			break;
+		default:
 			assert(false);
+			break;
 		}
+		//{
+		//	std::shared_lock<std::shared_mutex> lock(MapMutex);
+		//	if (CompFuncMap.find(Exp->_comp_type) != CompFuncMap.end())
+		//	{
+		//		assert(Exp);
+		//		CompFuncMap[Exp->_comp_type](client_id, num_byte, Exp);
+		//	}
+		//	else
+		//	{
+		//		assert(false);
+		//	}
+		//}
 	}
 }
 
 void PokeGServer::Timer()
 {
-	TimerMgr* TimerInstance = TimerMgr::Instance();
-	while (true)
-	{
-		TimerInstance->Pop();
-	}
+	//TimerMgr* TimerInstance = TimerMgr::Instance();
+	//while (true)
+	//{
+	//	TimerInstance->Pop();
+	//}
 }
 
 void PokeGServer::ThreadJoin()

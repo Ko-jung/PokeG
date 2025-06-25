@@ -18,7 +18,7 @@ void PacketMgr::ProcessPacket(PACKET* packet, std::shared_ptr<Client> c)
 	{
 		CS_LOGIN_PACKET* loginPacket = static_cast<CS_LOGIN_PACKET*>(packet);
 		ClientMgr::Instance()->ProcessLogin(loginPacket, c);
-		LogUtil::Log("Client {} logged in with name: {}", c->ClientNum, loginPacket->name);
+		//LogUtil::Log("Client {} logged in with name: {}", c->ClientNum, loginPacket->name);
 		break;
 	}
 	case CS_MOVE:
@@ -28,17 +28,17 @@ void PacketMgr::ProcessPacket(PACKET* packet, std::shared_ptr<Client> c)
 	}
 	case CS_8DIRECT_MOVE:
 	{
-		ClientMgr::Instance()->ProcessMove(reinterpret_cast<CS_8DIRECT_MOVE_PACKET*>(packet), c);
+		//ClientMgr::Instance()->ProcessMove(reinterpret_cast<CS_8DIRECT_MOVE_PACKET*>(packet), c);
 		break;
 	}
 	case CS_CHAT:
 	{
-		ClientMgr::Instance()->ProcessChat(reinterpret_cast<CS_CHAT_PACKET*>(packet), c);
+		//ClientMgr::Instance()->ProcessChat(reinterpret_cast<CS_CHAT_PACKET*>(packet), c);
 		break;
 	}
 	case CS_ATTACK:
 	{
-		ClientMgr::Instance()->ProcessAttack(reinterpret_cast<CS_ATTACK_PACKET*>(packet), c);
+		//ClientMgr::Instance()->ProcessAttack(reinterpret_cast<CS_ATTACK_PACKET*>(packet), c);
 		break;
 	}
 	case CS_TELEPORT:
@@ -51,7 +51,7 @@ void PacketMgr::ProcessPacket(PACKET* packet, std::shared_ptr<Client> c)
 	}
 	case CS_STATE_CHANGE:
 	{
-		ClientMgr::Instance()->ProcessStateChange(reinterpret_cast<CS_STATE_CHANGE_PACKET*>(packet), c);
+		//ClientMgr::Instance()->ProcessStateChange(reinterpret_cast<CS_STATE_CHANGE_PACKET*>(packet), c);
 		break;
 	}
 	default:
