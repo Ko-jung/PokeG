@@ -7,12 +7,16 @@
 #include "Util/LogUtil.h"
 
 #include "Manager/ClientMgr.h"
+#include "Manager/PacketMgr.h"
 #include "Manager/MapMgr.h"
 #include "Manager/SectorMgr.h"
 #include "Manager/TimerMgr.h"
 #include "Manager/DBMgr.h"
 
 #include "Client.h"
+
+bool ClientMgr::SingleTonFlag = false;
+bool PacketMgr::SingleTonFlag = false;
 
 PokeGServer::PokeGServer()
 {

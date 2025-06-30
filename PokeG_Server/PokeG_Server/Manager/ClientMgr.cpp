@@ -15,6 +15,9 @@
 ClientMgr::ClientMgr() :
 	ClientCount(0)
 {
+	assert(!SingleTonFlag);
+	SingleTonFlag = true;
+
 	for (auto& c : Clients)
 	{
 		c = nullptr;

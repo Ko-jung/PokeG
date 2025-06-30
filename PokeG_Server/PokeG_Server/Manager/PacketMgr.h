@@ -15,12 +15,13 @@ class PacketMgr
 	SINGLETON(PacketMgr)
 
 public:
-	PacketMgr() {}
-	~PacketMgr() {}
+	PacketMgr();
+	~PacketMgr();
 
 public:
 	void ProcessPacket(PACKET* packet, std::shared_ptr<Client> c);
 
 private:
+	static bool SingleTonFlag;
 };
 

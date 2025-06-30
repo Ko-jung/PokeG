@@ -7,6 +7,16 @@
 //#include "../TimerEvent.h"
 #include "../Util/LogUtil.h"
 
+PacketMgr::PacketMgr()
+{
+	assert(!SingleTonFlag);
+	SingleTonFlag = true;
+}
+
+PacketMgr::~PacketMgr()
+{
+}
+
 void PacketMgr::ProcessPacket(PACKET* packet, std::shared_ptr<Client> c)
 {
 	assert(c->ClientNum >= 0 && c->ClientNum < MAX_USER);

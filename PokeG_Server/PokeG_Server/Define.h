@@ -4,6 +4,6 @@
 public:\
 static classType* Instance()\
 {\
-	static classType inst;\
-	return &inst;\
+	static classType* inst = new classType;\
+	return inst;\
 }	

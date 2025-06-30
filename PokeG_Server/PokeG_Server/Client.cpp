@@ -107,6 +107,7 @@ void Client::RecvProcess(int byte, OverExpansion* exp)
 		if (RemainData >= packet->size)
 		{
 			PacketMgr::Instance()->ProcessPacket(packet, shared_from_this());
+			//switch (packet->type)
 			Buf += packet->size;
 			RemainData -= packet->size;
 		}
