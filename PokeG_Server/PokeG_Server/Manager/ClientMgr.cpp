@@ -530,6 +530,7 @@ void ClientMgr::ProcessLogin(const CS_LOGIN_PACKET* CLP, std::shared_ptr<Client>
 	//	CLP->name, SLIP);
 
 	assert(IsValid(c));
+	assert(CLP->type == CS_LOGIN);
 
 	strcpy_s(c->PlayerName, sizeof(c->PlayerName), CLP->name);
 	{

@@ -108,6 +108,37 @@ void Client::RecvProcess(int byte, OverExpansion* exp)
 		{
 			PacketMgr::Instance()->ProcessPacket(packet, shared_from_this());
 			//switch (packet->type)
+			//{
+			//case CS_LOGIN:
+			//{
+			//	CS_LOGIN_PACKET* loginPacket = static_cast<CS_LOGIN_PACKET*>(packet);
+			//
+			//	//WCHAR query[100];
+			//	//SC_LOGIN_INFO_PACKET SLIP;
+			//	//
+			//	//bool Succ = DBMgr::Instance()->ExecLogin(L"SELECT ID, X, Y, Visual, Level, Hp, MaxHp, Exp FROM [GSP_Termproject].[dbo].[GSP_Termproject_Player]",
+			//	//	CLP->name, SLIP);
+			//
+			//	strcpy_s(PlayerName, sizeof(PlayerName), loginPacket->name);
+			//	{
+			//		std::lock_guard<std::mutex> ll{ StateMutex };
+			//		State = CLIENT_STATE::INGAME;
+			//	}
+			//	//if(Succ)
+			//	//	c->SendLoginInfo(&SLIP);
+			//	//else
+			//	SendLoginInfo();
+			//
+			//
+			//	// ADD SECTOR
+			//	// SectorMgr::Instance()->Insert(c);
+			//	// ==========
+			//
+			//	//SendAddPlayerUseSector(c);
+			//
+			//	break;
+			//}
+			//}
 			Buf += packet->size;
 			RemainData -= packet->size;
 		}
