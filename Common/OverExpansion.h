@@ -29,6 +29,7 @@ public:
 	OverExpansion(char* packet)
 	{
 		_wsabuf.len = *(unsigned short*)packet;
+		assert(_wsabuf.len <= sizeof(SC_ADD_OBJECT_PACKET));
 		_wsabuf.buf = _send_buf;
 		ZeroMemory(&_over, sizeof(_over));
 		_comp_type = COMP_TYPE::OP_SEND;

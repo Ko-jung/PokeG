@@ -6,8 +6,9 @@
 #include <mutex>
 #include <chrono>
 
-class Client : public std::enable_shared_from_this<Client>
+class alignas(64) Client : public std::enable_shared_from_this<Client>
 {
+	OverExpansion Exp;
 public:
 	Client();
 	~Client();
@@ -37,7 +38,7 @@ public:
 	SOCKET Socket;
 
 	std::mutex ExpMutex;
-	OverExpansion Exp;
+	std::mutex ClientMutex;
 
 	int RemainDataLen;
 
@@ -61,4 +62,3 @@ public:
 	static int ImageSpriteWidth;
 	static int ImageSpriteHeight;
 };
-

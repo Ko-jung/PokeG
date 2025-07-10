@@ -268,19 +268,32 @@ void ClientMgr::SendPosToOtherClientUseSector(std::shared_ptr<Client> c)
 
 void ClientMgr::SendAddPlayerUseSector(std::shared_ptr<Client> c)
 {
-	for (auto& pClient : Clients)
+	//std::lock_guard<std::mutex> ll(c->ClientMutex);
+
+	auto now = std::chrono::high_resolution_clock::now();
+	static auto Temp = std::chrono::high_resolution_clock::now();
+	TempMutex.lock();
+	for (auto pClient : Clients)
 	{
 		if (!pClient) continue;
+		if (pClient == c) continue;
 
 		{
 			std::lock_guard<std::mutex> ll(pClient->StateMutex);
 			if (CLIENT_STATE::INGAME != pClient->State) continue;
 		}
-		if (pClient->ClientNum == c->ClientNum) continue;
 		if (!IsNPC(pClient))
 			pClient->SendAddPlayer(c);
 
 		c->SendAddPlayer(pClient);
+	}
+	TempMutex.unlock();
+	auto end = std::chrono::high_resolution_clock::now();
+
+	if (ClientCount > 4200 && std::chrono::duration_cast<std::chrono::seconds>(end - Temp).count() > 3)
+	{
+		std::cout << "SendAddPlayerUseSector Time: " << std::chrono::duration_cast<std::chrono::milliseconds>(end - now).count() << "ms" << std::endl;
+		Temp = std::chrono::high_resolution_clock::now();
 	}
 
 	//int	CurrSectorXPos = c->Position.X / SECTORSIZE;
@@ -529,8 +542,8 @@ void ClientMgr::ProcessLogin(const CS_LOGIN_PACKET* CLP, std::shared_ptr<Client>
 	//bool Succ = DBMgr::Instance()->ExecLogin(L"SELECT ID, X, Y, Visual, Level, Hp, MaxHp, Exp FROM [GSP_Termproject].[dbo].[GSP_Termproject_Player]",
 	//	CLP->name, SLIP);
 
-	assert(IsValid(c));
-	assert(CLP->type == CS_LOGIN);
+	// assert(IsValid(c));
+	// assert(CLP->type == CS_LOGIN);
 
 	strcpy_s(c->PlayerName, sizeof(c->PlayerName), CLP->name);
 	{

@@ -58,6 +58,7 @@ private:
 	std::atomic<int> ClientCount;
 
 	std::mutex AcceptMutex;
+	std::mutex TempMutex;
 
 	static bool SingleTonFlag;
 };

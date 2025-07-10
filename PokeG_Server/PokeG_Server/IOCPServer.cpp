@@ -129,7 +129,7 @@ void PokeGServer::Worker()
 		if (0 == num_byte)
 		{
 			if (Exp->_comp_type == COMP_TYPE::OP_SEND || Exp->_comp_type == COMP_TYPE::OP_RECV)
-			 	ClientMgr::Instance()->Disconnect(client_id);
+				Disconnect(client_id);
 		}
 
 		//assert(COMP_TYPE::OP_RECV <= Exp->_comp_type && Exp->_comp_type <= COMP_TYPE::OP_SPAWN_PLAYER
@@ -190,6 +190,7 @@ void PokeGServer::ThreadJoin()
 
 void PokeGServer::Disconnect(int Id)
 {
+	assert(false);
 	ClientMgr::Instance()->Disconnect(Id);
 }
 

@@ -29,6 +29,7 @@ Client::Client() :
 
 Client::~Client()
 {
+	assert(false);
 	std::cerr << "~Client() Called" << std::endl;
 }
 
@@ -107,38 +108,6 @@ void Client::RecvProcess(int byte, OverExpansion* exp)
 		if (RemainData >= packet->size)
 		{
 			PacketMgr::Instance()->ProcessPacket(packet, shared_from_this());
-			//switch (packet->type)
-			//{
-			//case CS_LOGIN:
-			//{
-			//	CS_LOGIN_PACKET* loginPacket = static_cast<CS_LOGIN_PACKET*>(packet);
-			//
-			//	//WCHAR query[100];
-			//	//SC_LOGIN_INFO_PACKET SLIP;
-			//	//
-			//	//bool Succ = DBMgr::Instance()->ExecLogin(L"SELECT ID, X, Y, Visual, Level, Hp, MaxHp, Exp FROM [GSP_Termproject].[dbo].[GSP_Termproject_Player]",
-			//	//	CLP->name, SLIP);
-			//
-			//	strcpy_s(PlayerName, sizeof(PlayerName), loginPacket->name);
-			//	{
-			//		std::lock_guard<std::mutex> ll{ StateMutex };
-			//		State = CLIENT_STATE::INGAME;
-			//	}
-			//	//if(Succ)
-			//	//	c->SendLoginInfo(&SLIP);
-			//	//else
-			//	SendLoginInfo();
-			//
-			//
-			//	// ADD SECTOR
-			//	// SectorMgr::Instance()->Insert(c);
-			//	// ==========
-			//
-			//	//SendAddPlayerUseSector(c);
-			//
-			//	break;
-			//}
-			//}
 			Buf += packet->size;
 			RemainData -= packet->size;
 		}
@@ -146,7 +115,6 @@ void Client::RecvProcess(int byte, OverExpansion* exp)
 			break;
 	}
 	RemainDataLen = RemainData;
-
 	if (RemainData > 0)
 		memmove(exp->_send_buf, Buf, RemainData);
 	Recv();
@@ -286,7 +254,7 @@ void Client::SendAddPlayer(std::shared_ptr<Client> c)
 {
 	SC_ADD_OBJECT_PACKET SAOP;
 	SAOP.id = c->ClientNum;
-	strcpy_s(SAOP.name, c->PlayerName);
+	strcpy_s(SAOP.name, NAME_SIZE, c->PlayerName);
 	SAOP.size = sizeof(SAOP);
 	SAOP.type = SC_ADD_OBJECT;
 	SAOP.x = (short)c->Position.X;
