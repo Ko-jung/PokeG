@@ -21,6 +21,7 @@ bool PacketMgr::SingleTonFlag = false;
 PokeGServer::PokeGServer()
 {
 	AcceptExpOver = new OverExpansion;
+	AcceptExpOver->_comp_type = COMP_TYPE::OP_ACCEPT;
 
 	CompFuncMap[COMP_TYPE::OP_ACCEPT] = [this](int id, int byte, OverExpansion* exp) { this->ProcessAccept(id, byte, exp); };
 	CompFuncMap.insert({ COMP_TYPE::OP_RECV,	std::bind(&PokeGServer::ProcessRecv, this, std::placeholders::_1,std::placeholders::_2,std::placeholders::_3) });
@@ -196,14 +197,10 @@ void PokeGServer::Disconnect(int Id)
 
 void PokeGServer::ReadyAccept()
 {
-	SOCKET c_socket = WSASocket(AF_INET, SOCK_STREAM, IPPROTO_TCP, 0, 0, WSA_FLAG_OVERLAPPED);
-	char	accept_buf[sizeof(SOCKADDR_IN) * 2 + 32 + 100];
-
-	*(reinterpret_cast<SOCKET*>(&AcceptExpOver->_send_buf)) = c_socket;
+	NextAccpetSocket = WSASocket(AF_INET, SOCK_STREAM, IPPROTO_TCP, 0, 0, WSA_FLAG_OVERLAPPED);;
 	ZeroMemory(&AcceptExpOver->_over, sizeof(AcceptExpOver->_over));
-	AcceptExpOver->_comp_type = COMP_TYPE::OP_ACCEPT;
 
-	AcceptEx(ListenSocket, c_socket, accept_buf, 0, sizeof(SOCKADDR_IN) + 16,
+	AcceptEx(ListenSocket, NextAccpetSocket, AcceptExpOver->_send_buf, 0, sizeof(SOCKADDR_IN) + 16,
 		sizeof(SOCKADDR_IN) + 16, NULL, &AcceptExpOver->_over);
 }
 
@@ -211,18 +208,15 @@ void PokeGServer::ProcessAccept(int id, int byte, OverExpansion* exp)
 {
 	if (ClientMgr::Instance()->GetClientCount() < MAX_USER)
 	{
-		int NowClientNum;
-		std::shared_ptr<Client> NewClient = ClientMgr::Instance()->GetEmptyClient(NowClientNum);
+		std::shared_ptr<Client> NewClient = ClientMgr::Instance()->GetEmptyClient();
 		if (NewClient == nullptr)
 		{
 			std::cerr << "Client NULL!" << std::endl;
 			return;
 		}
+		NewClient->Socket = NextAccpetSocket;
 
-		NewClient->ClientNum = NowClientNum;
-		NewClient->Socket = (*(reinterpret_cast<SOCKET*>(exp->_send_buf)));
-
-		CreateIoCompletionPort(reinterpret_cast<HANDLE>(NewClient->Socket), hIocp, NowClientNum, 0);
+		CreateIoCompletionPort(reinterpret_cast<HANDLE>(NewClient->Socket), hIocp, NewClient->ClientNum, 0);
 
 	 	NewClient->Recv();
 

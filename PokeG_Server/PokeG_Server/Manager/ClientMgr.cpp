@@ -20,7 +20,7 @@ ClientMgr::ClientMgr() :
 
 	for (auto& c : Clients)
 	{
-		c = nullptr;
+		c = std::make_shared<Client>();
 	}
 }
 
@@ -87,17 +87,15 @@ bool ClientMgr::IsValid(std::shared_ptr<Client> c)
 	return true;
 }
 
-std::shared_ptr<Client> ClientMgr::GetEmptyClient(int& ClientNum)
+std::shared_ptr<Client> ClientMgr::GetEmptyClient()
 {
 	for (int i = 0; i < MAX_USER; i++)
 	{
-		std::lock_guard<std::mutex> ll(AcceptMutex);
-		if (!Clients[i])
+		std::lock_guard<std::mutex> ll(Clients[i]->StateMutex);
+		if (Clients[i]->State == CLIENT_STATE::FREE)
 		{
-			Clients[i] = std::make_shared<Client>();
 			Clients[i]->ClientNum = i;
 			Clients[i]->State = CLIENT_STATE::ALLOC;
-			ClientNum = i;
 			ClientCount++;
 			return Clients[i];
 		}
@@ -272,7 +270,7 @@ void ClientMgr::SendAddPlayerUseSector(std::shared_ptr<Client> c)
 
 	auto now = std::chrono::high_resolution_clock::now();
 	static auto Temp = std::chrono::high_resolution_clock::now();
-	TempMutex.lock();
+	//TempMutex.lock();
 	for (auto pClient : Clients)
 	{
 		if (!pClient) continue;
@@ -287,14 +285,15 @@ void ClientMgr::SendAddPlayerUseSector(std::shared_ptr<Client> c)
 
 		c->SendAddPlayer(pClient);
 	}
-	TempMutex.unlock();
+	//TempMutex.unlock();
+
 	auto end = std::chrono::high_resolution_clock::now();
 
-	if (ClientCount > 4200 && std::chrono::duration_cast<std::chrono::seconds>(end - Temp).count() > 3)
-	{
-		std::cout << "SendAddPlayerUseSector Time: " << std::chrono::duration_cast<std::chrono::milliseconds>(end - now).count() << "ms" << std::endl;
-		Temp = std::chrono::high_resolution_clock::now();
-	}
+	//if (ClientCount > 4200 && std::chrono::duration_cast<std::chrono::seconds>(end - Temp).count() > 3)
+	//{
+	//	std::cout << "SendAddPlayerUseSector Time: " << std::chrono::duration_cast<std::chrono::milliseconds>(end - now).count() << "ms" << std::endl;
+	//	Temp = std::chrono::high_resolution_clock::now();
+	//}
 
 	//int	CurrSectorXPos = c->Position.X / SECTORSIZE;
 	//int CurrSectorYPos = c->Position.Y / SECTORSIZE;
@@ -536,23 +535,23 @@ void ClientMgr::ProcessClientSpawn(int id)
 
 void ClientMgr::ProcessLogin(const CS_LOGIN_PACKET* CLP, std::shared_ptr<Client> c)
 {
-	//WCHAR query[100];
-	//SC_LOGIN_INFO_PACKET SLIP;
-	//
-	//bool Succ = DBMgr::Instance()->ExecLogin(L"SELECT ID, X, Y, Visual, Level, Hp, MaxHp, Exp FROM [GSP_Termproject].[dbo].[GSP_Termproject_Player]",
-	//	CLP->name, SLIP);
+	WCHAR query[100];
+	SC_LOGIN_INFO_PACKET SLIP;
+	
+	bool Succ = DBMgr::Instance()->ExecLogin(L"SELECT ID, X, Y, Visual, Level, Hp, MaxHp, Exp FROM [GSP_Termproject].[dbo].[GSP_Termproject_Player]",
+		CLP->name, SLIP);
 
-	// assert(IsValid(c));
-	// assert(CLP->type == CS_LOGIN);
+	assert(IsValid(c));
+	assert(CLP->type == CS_LOGIN);
 
 	strcpy_s(c->PlayerName, sizeof(c->PlayerName), CLP->name);
 	{
 		std::lock_guard<std::mutex> ll{ c->StateMutex };
 		c->State = CLIENT_STATE::INGAME;
 	}
-	//if(Succ)
-	//	c->SendLoginInfo(&SLIP);
-	//else
+	if(Succ)
+		c->SendLoginInfo(&SLIP);
+	else
 		c->SendLoginInfo();
 
 
@@ -565,7 +564,7 @@ void ClientMgr::ProcessLogin(const CS_LOGIN_PACKET* CLP, std::shared_ptr<Client>
 
 void ClientMgr::ProcessStressTestMove(CS_MOVE_PACKET* CMP, std::shared_ptr<Client> c)
 {
-	c->StressTestMove(CMP->direction);
+	c->StressTestMove(CMP);
 	SendPosToOtherClient(c);
 	//SendPosToOtherClientUseSector(c);
 }

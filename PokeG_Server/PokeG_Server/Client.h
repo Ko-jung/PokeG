@@ -18,7 +18,7 @@ public:
 	void Recv();
 	void RecvProcess(int byte, OverExpansion* exp);
 
-	void StressTestMove(char Direction);
+	void StressTestMove(const CS_MOVE_PACKET* const CMP);
 	void Move(POSITION NewPos, char direction);
 	bool ApplyDamage(std::shared_ptr<Client> Attacker, const int Damage);
 

@@ -40,5 +40,7 @@ public:
 private:
 	std::shared_mutex MapMutex;
 	std::unordered_map<COMP_TYPE, std::function<void(int, int, OverExpansion*)>> CompFuncMap;
+
+	SOCKET NextAccpetSocket;
 };
 

@@ -33,7 +33,7 @@ void PacketMgr::ProcessPacket(PACKET* packet, std::shared_ptr<Client> c)
 	}
 	case CS_MOVE:
 	{
-		//ClientMgr::Instance()->ProcessStressTestMove(reinterpret_cast<CS_MOVE_PACKET*>(packet), c);
+		ClientMgr::Instance()->ProcessStressTestMove(reinterpret_cast<CS_MOVE_PACKET*>(packet), c);
 		break;
 	}
 	case CS_8DIRECT_MOVE:

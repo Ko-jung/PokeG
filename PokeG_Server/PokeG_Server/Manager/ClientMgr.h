@@ -25,7 +25,7 @@ public:
 
 	bool IsValid(std::shared_ptr<Client> c);
 
-	std::shared_ptr<Client> GetEmptyClient(int& ClientNum);
+	std::shared_ptr<Client> GetEmptyClient();
 	int GetClientCount() { return ClientCount; }
 
 	void MapCollisionCheck(int id);
@@ -53,11 +53,11 @@ public:
 	void ProcessStateChange(CS_STATE_CHANGE_PACKET* CSCP, std::shared_ptr<Client> c);
 	void ProcessChat(CS_CHAT_PACKET* CCP, std::shared_ptr<Client> c);
 
+	std::mutex AcceptMutex;
 private:
 	std::array<std::shared_ptr<Client>, MAX_USER + MAX_NPC> Clients;
 	std::atomic<int> ClientCount;
 
-	std::mutex AcceptMutex;
 	std::mutex TempMutex;
 
 	static bool SingleTonFlag;

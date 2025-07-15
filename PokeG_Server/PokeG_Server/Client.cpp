@@ -19,7 +19,8 @@ Client::Client() :
 	RemainDataLen(0),
 	Speed(0.7f),
 	Size(1.f),
-	Experience(0.f)
+	Experience(0.f),
+	State(CLIENT_STATE::FREE)
 {
 	ImageSpriteWidth = 16;
 	ImageSpriteHeight = 32;
@@ -120,8 +121,10 @@ void Client::RecvProcess(int byte, OverExpansion* exp)
 	Recv();
 }
 
-void Client::StressTestMove(char Direction)
+void Client::StressTestMove(const CS_MOVE_PACKET* const CMP)
 {
+	LastMoveTime = CMP->move_time;
+	char Direction = CMP->direction;
 	switch (Direction)
 	{
 	case 0: if (Position.Y > 0)				Position.Y--; break;
