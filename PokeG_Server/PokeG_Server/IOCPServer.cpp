@@ -191,7 +191,6 @@ void PokeGServer::ThreadJoin()
 
 void PokeGServer::Disconnect(int Id)
 {
-	assert(false);
 	ClientMgr::Instance()->Disconnect(Id);
 }
 
